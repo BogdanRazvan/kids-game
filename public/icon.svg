@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Joacă și Învață">
+  <rect width="512" height="512" rx="112" fill="#5b3cc4" />
+  <circle cx="256" cy="262" r="150" fill="#ffd43b" />
+  <polygon points="256,150 288,224 368,230 307,282 327,360 256,317 185,360 205,282 144,230 224,224" fill="#ff922b" />
+</svg>

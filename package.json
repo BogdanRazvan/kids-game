@@ -1,0 +1,27 @@
+{
+  "name": "joaca-si-invata",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host",
+    "gen-audio": "node --experimental-strip-types scripts/gen-audio.mjs",
+    "split-letters": "node --experimental-strip-types scripts/split-letters.mjs letters",
+    "split-digits": "node --experimental-strip-types scripts/split-letters.mjs digits",
+    "record-letters": "node --experimental-strip-types scripts/record-set.mjs letters",
+    "record-digits": "node --experimental-strip-types scripts/record-set.mjs digits"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@vitejs/plugin-react": "4.3.4",
+    "typescript": "5.6.3",
+    "vite": "5.4.11"
+  }
+}
