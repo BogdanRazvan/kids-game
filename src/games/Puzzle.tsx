@@ -141,7 +141,7 @@ export function Puzzle({ onBack }: GameProps) {
   const inTray = pieces.filter((c) => !placed.has(c))
 
   return (
-    <div className="game">
+    <div className="game" style={{ ['--n' as string]: pieces.length } as React.CSSProperties}>
       <TopBar
         title="Puzzle"
         onBack={onBack}
@@ -187,17 +187,6 @@ export function Puzzle({ onBack }: GameProps) {
             <div className="scene" ref={bigRef}>
               <svg viewBox={`0 0 ${VW} ${VH}`} className="scene-svg">
                 <SceneObjects />
-                {[...placed].map((c) => (
-                  <rect
-                    key={c}
-                    x={colOf(c) * CW}
-                    y={rowOf(c) * CH}
-                    width={CW}
-                    height={CH}
-                    rx={3}
-                    className="puzzle-cell-done"
-                  />
-                ))}
               </svg>
             </div>
           </div>

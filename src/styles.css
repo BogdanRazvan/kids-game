@@ -379,20 +379,13 @@ button:focus-visible {
   /* Same height as the picture, so the pieces stack in one column and fit. */
   height: calc(clamp(190px, 43vw, 380px) * 1.25);
 }
-/* Green ring marks a cell once its piece crop has been matched. */
-.puzzle-cell-done {
-  fill: none;
-  stroke: #37b24d;
-  stroke-width: 2;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: ring-pop 0.35s ease;
-}
 /* A piece is a clipped crop shown at the SAME size as the cell it covers
    (the picture is 3×3 cells; subtract its 10px border, then divide by 3). */
 .puzzle-piece {
-  flex: 1 1 0;
-  min-height: 0;
+  flex: 0 0 auto;
+  /* Sized for the round's total piece count (--n) so pieces keep their size as
+     others are placed. */
+  height: calc((clamp(190px, 43vw, 380px) * 1.25 - (var(--n) - 1) * clamp(6px, 1.5vw, 12px)) / var(--n));
   aspect-ratio: 4 / 5;
   border-radius: 8px;
   overflow: hidden;
@@ -413,7 +406,7 @@ button:focus-visible {
 }
 .drag-ghost {
   position: fixed;
-  width: calc((clamp(190px, 43vw, 380px) - 10px) / 3);
+  height: calc((clamp(190px, 43vw, 380px) * 1.25 - (var(--n) - 1) * clamp(6px, 1.5vw, 12px)) / var(--n));
   aspect-ratio: 4 / 5;
   transform: translate(-50%, -50%);
   border-radius: 8px;
