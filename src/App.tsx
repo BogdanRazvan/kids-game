@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Home } from './components/Home'
-import { Collection } from './components/Collection'
 import { Colors } from './games/Colors'
 import { Counting } from './games/Counting'
 import { Shapes } from './games/Shapes'
@@ -18,6 +17,14 @@ import { Odd } from './games/Odd'
 import { Music } from './games/Music'
 import { SpotDifference } from './games/SpotDifference'
 import { Puzzle } from './games/Puzzle'
+import { Addition } from './games/Addition'
+import { OrderSize } from './games/OrderSize'
+import { Sorting } from './games/Sorting'
+import { Maze } from './games/Maze'
+import { MissingNumber } from './games/MissingNumber'
+import { ConnectDots } from './games/ConnectDots'
+import { Food } from './games/Food'
+import { Remember } from './games/Remember'
 
 export type GameId =
   | 'colors'
@@ -37,7 +44,15 @@ export type GameId =
   | 'music'
   | 'spot'
   | 'puzzle'
-type Screen = 'home' | 'collection' | GameId
+  | 'addition'
+  | 'ordersize'
+  | 'sorting'
+  | 'maze'
+  | 'missingnumber'
+  | 'dots'
+  | 'food'
+  | 'remember'
+type Screen = 'home' | GameId
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
@@ -45,10 +60,7 @@ export default function App() {
 
   return (
     <div className="app">
-      {screen === 'home' && (
-        <Home onPick={setScreen} onOpenBook={() => setScreen('collection')} />
-      )}
-      {screen === 'collection' && <Collection onBack={back} />}
+      {screen === 'home' && <Home onPick={setScreen} />}
       {screen === 'colors' && <Colors onBack={back} />}
       {screen === 'counting' && <Counting onBack={back} />}
       {screen === 'shapes' && <Shapes onBack={back} />}
@@ -66,6 +78,14 @@ export default function App() {
       {screen === 'music' && <Music onBack={back} />}
       {screen === 'spot' && <SpotDifference onBack={back} />}
       {screen === 'puzzle' && <Puzzle onBack={back} />}
+      {screen === 'addition' && <Addition onBack={back} />}
+      {screen === 'ordersize' && <OrderSize onBack={back} />}
+      {screen === 'sorting' && <Sorting onBack={back} />}
+      {screen === 'maze' && <Maze onBack={back} />}
+      {screen === 'missingnumber' && <MissingNumber onBack={back} />}
+      {screen === 'dots' && <ConnectDots onBack={back} />}
+      {screen === 'food' && <Food onBack={back} />}
+      {screen === 'remember' && <Remember onBack={back} />}
     </div>
   )
 }

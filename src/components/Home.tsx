@@ -1,6 +1,3 @@
-import { speak } from '../lib/audio'
-import { useCollected } from '../lib/collection'
-import { STICKERS } from '../data/stickers'
 import type { GameId } from '../App'
 
 type GameCard = { id: GameId; title: string; emoji: string; color: string }
@@ -26,51 +23,40 @@ const EASY_GAMES: GameCard[] = [
 const MEDIUM_GAMES: GameCard[] = [
   { id: 'spot', title: 'Diferențe', emoji: '🔎', color: '#e8348c' },
   { id: 'puzzle', title: 'Puzzle', emoji: '🖼️', color: '#1c7ed6' },
+  { id: 'addition', title: 'Adunare', emoji: '➕', color: '#f03e3e' },
+  { id: 'ordersize', title: 'Ordonează', emoji: '📊', color: '#0ca678' },
+  { id: 'sorting', title: 'Sortare', emoji: '🗂️', color: '#f76707' },
+  { id: 'maze', title: 'Labirint', emoji: '🐭', color: '#d6336c' },
+  { id: 'missingnumber', title: 'Numere lipsă', emoji: '🧮', color: '#1098ad' },
+  { id: 'dots', title: 'Unește punctele', emoji: '✨', color: '#e8590c' },
+  { id: 'food', title: 'Hrană', emoji: '🍽️', color: '#66a80f' },
+  { id: 'remember', title: 'Ține minte', emoji: '💡', color: '#7048e8' },
 ]
 
-type Props = { onPick: (id: GameId) => void; onOpenBook: () => void }
+type Props = { onPick: (id: GameId) => void }
 
-export function Home({ onPick, onOpenBook }: Props) {
-  const collected = useCollected()
-  const have = STICKERS.filter((s) => collected.has(s.id)).length
-
+export function Home({ onPick }: Props) {
   return (
     <div className="home">
       <header className="home-head">
         <h1>Joacă și Învață</h1>
         <p>Alege un joc</p>
       </header>
-      <button
-        className="book-banner"
-        onClick={() => {
-          speak('Colecția mea')
-          onOpenBook()
-        }}
-      >
-        <span className="book-banner-emoji">🏅</span>
-        <span className="book-banner-text">Colecția mea</span>
-        <span className="book-banner-count">
-          {have}/{STICKERS.length}
-        </span>
-      </button>
-      <Section title="Jocuri ușoare" games={EASY_GAMES} onPick={onPick} />
-      <Section title="Jocuri medii" games={MEDIUM_GAMES} onPick={onPick} />
+      <Section games={EASY_GAMES} onPick={onPick} />
+      <Section games={MEDIUM_GAMES} onPick={onPick} />
     </div>
   )
 }
 
 function Section({
-  title,
   games,
   onPick,
 }: {
-  title: string
   games: GameCard[]
   onPick: (id: GameId) => void
 }) {
   return (
     <section className="section">
-      <h2 className="section-title">{title}</h2>
       <div className="grid">
         {games.map((g) => (
           <button

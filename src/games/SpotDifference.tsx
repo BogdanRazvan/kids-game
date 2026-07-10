@@ -2,11 +2,8 @@ import { useEffect, useState, MouseEvent } from 'react'
 import { TopBar } from '../components/TopBar'
 import { DoneScreen } from '../components/DoneScreen'
 import { Reward } from '../components/Reward'
-import { StickerReward } from '../components/StickerReward'
 import { GameProps, pick, ROUNDS_PER_GAME, sample } from '../lib/game'
 import { speak, successChime, wrongBuzz } from '../lib/audio'
-import { earnNewSticker } from '../lib/collection'
-import type { Sticker } from '../data/stickers'
 import { COLORS, draw, SCENE, SceneBg, SceneDefs, VH, VW } from './sceneArt'
 
 const INTRO = 'Găsește diferențele'
@@ -37,7 +34,6 @@ export function SpotDifference({ onBack }: GameProps) {
   const [board, setBoard] = useState<Board>(() => makeBoard(LEVELS[0]))
   const [found, setFound] = useState<Set<string>>(new Set())
   const [reward, setReward] = useState(false)
-  const [sticker, setSticker] = useState<Sticker | null>(null)
   const [wrong, setWrong] = useState(false)
   const done = index >= ROUNDS_PER_GAME
 
@@ -66,15 +62,12 @@ export function SpotDifference({ onBack }: GameProps) {
       setFound(nf)
       successChime()
       if (nf.size === board.diffs.length) {
-        const earned = Math.random() < 0.5 ? earnNewSticker() : null
         setReward(true)
-        setSticker(earned)
         setTimeout(() => {
           setReward(false)
-          setSticker(null)
           setIndex((n) => n + 1)
           newBoard(level)
-        }, earned ? 2000 : 1200)
+        }, 1200)
       }
     } else {
       wrongBuzz()
@@ -159,7 +152,6 @@ export function SpotDifference({ onBack }: GameProps) {
         </div>
       )}
       <Reward show={reward} />
-      <StickerReward sticker={sticker} />
     </div>
   )
 }

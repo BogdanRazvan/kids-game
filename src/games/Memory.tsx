@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react'
 import { TopBar } from '../components/TopBar'
 import { DoneScreen } from '../components/DoneScreen'
-import { StickerReward } from '../components/StickerReward'
 import { MEMORY_EMOJIS } from '../data/content'
 import { GameProps, sample, shuffle } from '../lib/game'
 import { flipTick, speak, successChime, wrongBuzz } from '../lib/audio'
-import { earnNewSticker } from '../lib/collection'
-import type { Sticker } from '../data/stickers'
 
 type Card = { id: number; emoji: string }
 // Pairs to find at each level — more pairs = harder.
@@ -30,7 +27,6 @@ export function Memory({ onBack }: GameProps) {
   const [flipped, setFlipped] = useState<number[]>([])
   const [matched, setMatched] = useState<Set<number>>(new Set())
   const [lock, setLock] = useState(false)
-  const [sticker, setSticker] = useState<Sticker | null>(null)
 
   const done = matched.size === deck.length
 
@@ -51,15 +47,12 @@ export function Memory({ onBack }: GameProps) {
       const [a, b] = next
       if (deck[a].emoji === deck[b].emoji) {
         successChime()
-        const earned = Math.random() < 0.5 ? earnNewSticker() : null
-        setSticker(earned)
         // No spoken praise on a match — the success chime is the reward.
         setTimeout(() => {
           setMatched((m) => new Set([...m, deck[a].id, deck[b].id]))
           setFlipped([])
           setLock(false)
-          setSticker(null)
-        }, earned ? 1900 : 650)
+        }, 650)
       } else {
         wrongBuzz()
         setTimeout(() => {
@@ -140,7 +133,6 @@ export function Memory({ onBack }: GameProps) {
         </div>
         </div>
       )}
-      <StickerReward sticker={sticker} />
     </div>
   )
 }

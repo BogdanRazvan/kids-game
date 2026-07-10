@@ -89,6 +89,9 @@ OVERRIDES['Care obiect e diferit fata de celelalte?'] = {
 }
 OVERRIDES['Ce formă urmează?'] = { length: 1.5, synth: 'Ce formă urmează.' }
 OVERRIDES['Ce instrument se aude?'] = { length: 1.5, synth: 'Ce instrument se aude.' }
+OVERRIDES['Care este rezultatul adunării?'] = { length: 1.4, synth: 'Care este rezultatul adunării.' }
+OVERRIDES['Ce număr lipsește?'] = { length: 1.5, synth: 'Ce număr lipsește.' }
+OVERRIDES['Ce mănâncă?'] = { length: 1.5, synth: 'Ce mănâncă.' }
 // Sizes words — short, so clean ending + a little slower.
 OVERRIDES['cel mare'] = { length: 1.4, synth: 'cel mare.' }
 OVERRIDES['cel mic'] = { length: 1.4, synth: 'cel mic.' }
@@ -162,6 +165,23 @@ for (let h = 0; h <= STICKERS.length; h++) phrases.add(`Colecția mea. ${h} din 
   'Găsește intrusul',
   'Găsește diferențele',
   'Completează imaginea',
+  'Care este rezultatul adunării?',
+  'Ce număr lipsește?',
+  'Ajută șoricelul să găsească brânza',
+  'Unește punctele în ordine',
+  'Ce mănâncă?',
+  // animals eating (Food game) — spoken after the prompt
+  'vaca',
+  'iepurele',
+  'maimuța',
+  'șoarecele',
+  'câinele',
+  'pisica',
+  'ursul',
+  'ursulețul koala',
+  'Ține minte și repetă',
+  'Apasă pe obiecte, în ordine, de la mic la mare',
+  'Pune fiecare obiect în căsuța potrivită',
   'Ce instrument se aude?',
   'Apasă pe mai multe',
   'Apasă pe mai puține',

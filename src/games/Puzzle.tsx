@@ -2,11 +2,8 @@ import { useEffect, useRef, useState, PointerEvent as RPointerEvent } from 'reac
 import { TopBar } from '../components/TopBar'
 import { DoneScreen } from '../components/DoneScreen'
 import { Reward } from '../components/Reward'
-import { StickerReward } from '../components/StickerReward'
 import { GameProps, ROUNDS_PER_GAME, sample } from '../lib/game'
 import { speak, successChime, wrongBuzz } from '../lib/audio'
-import { earnNewSticker } from '../lib/collection'
-import type { Sticker } from '../data/stickers'
 import { draw, SCENE, SceneBg, SceneDefs, VH, VW } from './sceneArt'
 
 // The picture stays whole. Each tray piece is an exact rectangular crop of it;
@@ -55,7 +52,6 @@ export function Puzzle({ onBack }: GameProps) {
   const [dragCell, setDragCell] = useState<number | null>(null)
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 })
   const [reward, setReward] = useState(false)
-  const [sticker, setSticker] = useState<Sticker | null>(null)
   const [wrongCell, setWrongCell] = useState<number | null>(null)
   const bigRef = useRef<HTMLDivElement>(null)
   const done = index >= ROUNDS_PER_GAME
@@ -76,15 +72,12 @@ export function Puzzle({ onBack }: GameProps) {
       np.add(cell)
       successChime()
       if (np.size === pieces.length) {
-        const earned = Math.random() < 0.5 ? earnNewSticker() : null
         setReward(true)
-        setSticker(earned)
         setTimeout(() => {
           setReward(false)
-          setSticker(null)
           setIndex((n) => n + 1)
           newRound(level)
-        }, earned ? 2000 : 1200)
+        }, 1200)
       }
       return np
     })
@@ -198,7 +191,6 @@ export function Puzzle({ onBack }: GameProps) {
         </div>
       )}
       <Reward show={reward} />
-      <StickerReward sticker={sticker} />
     </div>
   )
 }

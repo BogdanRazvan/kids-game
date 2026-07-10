@@ -2,15 +2,8 @@ import { ReactNode, useEffect, useState } from 'react'
 import { TopBar } from './TopBar'
 import { DoneScreen } from './DoneScreen'
 import { Reward } from './Reward'
-import { StickerReward } from './StickerReward'
 import { ROUNDS_PER_GAME } from '../lib/game'
 import { speak, speakSequence, wrongBuzz } from '../lib/audio'
-import { earnNewSticker } from '../lib/collection'
-import type { Sticker } from '../data/stickers'
-
-// How often a correct answer drops a brand-new sticker. Not every time — the
-// surprise is what keeps it exciting.
-const STICKER_CHANCE = 0.5
 
 export type Choice = { key: string; render: ReactNode }
 
@@ -46,7 +39,6 @@ export function PickGame({ title, onBack, makeRound, levelOptions, intro }: Prop
   const [index, setIndex] = useState(0)
   const [round, setRound] = useState<Round>(() => makeRound(levelOptions[0], 0))
   const [reward, setReward] = useState(false)
-  const [sticker, setSticker] = useState<Sticker | null>(null)
   const [wrongKey, setWrongKey] = useState<string | null>(null)
   const options = levelOptions[level]
   const done = index >= ROUNDS_PER_GAME
@@ -70,16 +62,13 @@ export function PickGame({ title, onBack, makeRound, levelOptions, intro }: Prop
   function choose(key: string) {
     if (reward) return
     if (key === round.answer) {
-      const earned = Math.random() < STICKER_CHANCE ? earnNewSticker() : null
       setReward(true)
-      setSticker(earned)
       // No spoken praise on success — the success chime (Reward) is the reward.
       setTimeout(() => {
         setReward(false)
-        setSticker(null)
         setIndex((i) => i + 1)
         setRound(makeRound(options, level))
-      }, earned ? 2000 : 1100)
+      }, 1100)
     } else {
       wrongBuzz()
       setWrongKey(key)
@@ -146,7 +135,6 @@ export function PickGame({ title, onBack, makeRound, levelOptions, intro }: Prop
         </div>
       )}
       <Reward show={reward} />
-      <StickerReward sticker={sticker} />
     </div>
   )
 }
