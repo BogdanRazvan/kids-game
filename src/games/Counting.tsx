@@ -13,7 +13,7 @@ export function Counting({ onBack }: GameProps) {
     const numbers = shuffle([n, ...distractors])
 
     return {
-      prompt: `Apasă pe numărul de ${item.name}`,
+      prompt: 'Apasă pe numărul potrivit',
       answer: String(n),
       display: (
         <div className="count-objects">
@@ -34,7 +34,7 @@ export function Counting({ onBack }: GameProps) {
   return (
     <PickGame
       title="Numărăm"
-      intro="Apasă pe numărul de fructe"
+      intro="Apasă pe numărul potrivit"
       levelOptions={[3, 4, 5]}
       onBack={onBack}
       makeRound={makeRound}

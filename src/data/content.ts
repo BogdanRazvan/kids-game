@@ -1,7 +1,9 @@
 export type ColorItem = { name: string; hex: string }
 export type AnimalItem = { name: string; emoji: string; sound: string }
 export type ShapeItem = { name: string; kind: ShapeKind; color: string }
-export type ShapeKind = 'circle' | 'square' | 'triangle' | 'star' | 'heart'
+export type ShapeKind =
+  | 'circle' | 'square' | 'triangle' | 'star' | 'heart'
+  | 'rectangle' | 'oval' | 'diamond'
 
 export const COLORS: ColorItem[] = [
   { name: 'roșu', hex: '#e63946' },
@@ -10,6 +12,11 @@ export const COLORS: ColorItem[] = [
   { name: 'galben', hex: '#f4c22b' },
   { name: 'portocaliu', hex: '#f3722c' },
   { name: 'mov', hex: '#8e44ad' },
+  { name: 'roz', hex: '#f06595' },
+  { name: 'maro', hex: '#8a5a2b' },
+  { name: 'negru', hex: '#212529' },
+  { name: 'alb', hex: '#f1f3f5' },
+  { name: 'gri', hex: '#868e96' },
 ]
 
 export const ANIMALS: AnimalItem[] = [
@@ -21,6 +28,11 @@ export const ANIMALS: AnimalItem[] = [
   { name: 'cal', emoji: '🐴', sound: 'ihaha' },
   { name: 'porc', emoji: '🐷', sound: 'guiț guiț' },
   { name: 'broască', emoji: '🐸', sound: 'oac oac' },
+  { name: 'cocoș', emoji: '🐓', sound: 'cucurigu' },
+  { name: 'elefant', emoji: '🐘', sound: 'trâmbiță' },
+  { name: 'leu', emoji: '🦁', sound: 'rrr' },
+  { name: 'bufniță', emoji: '🦉', sound: 'hu hu' },
+  { name: 'lup', emoji: '🐺', sound: 'auuu' },
 ]
 
 export const SHAPES: ShapeItem[] = [
@@ -28,9 +40,12 @@ export const SHAPES: ShapeItem[] = [
   { name: 'pătrat', kind: 'square', color: '#1d7bd6' },
   { name: 'triunghi', kind: 'triangle', color: '#2a9d54' },
   { name: 'inima', kind: 'heart', color: '#d6336c' },
+  { name: 'dreptunghi', kind: 'rectangle', color: '#f59f00' },
+  { name: 'oval', kind: 'oval', color: '#845ef7' },
+  { name: 'romb', kind: 'diamond', color: '#0ca678' },
 ]
 
-// `name` is the plural, spoken as "Atinge numărul <name>".
+// The name (plural) is shown on the prompt; the child just counts what's drawn.
 export type CountItem = { emoji: string; name: string }
 export const COUNT_ITEMS: CountItem[] = [
   { emoji: '🍎', name: 'mere' },
@@ -39,21 +54,50 @@ export const COUNT_ITEMS: CountItem[] = [
   { emoji: '🍌', name: 'banane' },
   { emoji: '🐟', name: 'pești' },
   { emoji: '🚗', name: 'mașini' },
+  { emoji: '🌸', name: 'flori' },
+  { emoji: '⭐', name: 'stele' },
+  { emoji: '⚽', name: 'mingi' },
+  { emoji: '🐱', name: 'pisici' },
+  { emoji: '🐶', name: 'cățeluși' },
+  { emoji: '🐰', name: 'iepurași' },
+  { emoji: '🦋', name: 'fluturi' },
+  { emoji: '🍓', name: 'căpșuni' },
+  { emoji: '🍊', name: 'portocale' },
+  { emoji: '🍇', name: 'struguri' },
+  { emoji: '🧸', name: 'ursuleți' },
+  { emoji: '❤️', name: 'inimioare' },
+  { emoji: '🐞', name: 'buburuze' },
+  { emoji: '🍄', name: 'ciuperci' },
 ]
 
-export const MEMORY_EMOJIS = ['🐶', '🐱', '🐮', '🦆', '🐸', '🦁', '🐰', '🐷']
+export const MEMORY_EMOJIS = [
+  '🐶', '🐱', '🐮', '🦆', '🐸', '🦁', '🐰', '🐷',
+  '🐵', '🐘', '🐯', '🐨', '🐻', '🦊', '🐼', '🐔',
+  '🦋', '🐢', '🐝', '🦉', '🐧', '🦄', '🐴', '🐬',
+  '🦀', '🐙', '🦖', '🐳', '🦓', '🦒',
+]
 
-// Clearly-shaped objects for the Shadows and "Odd one out" games.
+// Clearly-shaped objects for the Shadows, Different, Same and More/Less games.
 export const OBJECT_EMOJIS = [
   '🦋', '🐟', '🐢', '🚗', '🌳', '🍎', '⭐', '🐶',
   '🌸', '🚀', '🐘', '🦀', '⚽', '🎈', '🍌', '🐰',
+  '🚲', '🌙', '☂️', '🍄', '🐝', '🎁', '🔔', '🏠',
+  '🌵', '🍦', '🐧', '🎸', '🦖', '🍕', '🥕', '🦉',
+  '🐬', '🚁', '🦑', '🧁', '🍉', '🐞', '🦩', '🪁',
 ]
 
 // Same object shown at different sizes in the Big/Small game.
-export const SIZE_EMOJIS = ['🐘', '🐶', '🍎', '⭐', '🚗', '🐟', '🎈', '🌳', '🐰', '🍌']
+export const SIZE_EMOJIS = [
+  '🐘', '🐶', '🍎', '⭐', '🚗', '🐟', '🎈', '🌳', '🐰', '🍌',
+  '🦋', '🐢', '🌸', '🚀', '⚽', '🍦', '🐝', '🐧', '🦀', '🍄',
+  '🐱', '🦁', '🎁', '🌵',
+]
 
 // Colourful tokens for the Patterns game.
-export const PATTERN_EMOJIS = ['🔴', '🔵', '🟡', '🟢', '🟣', '🟠', '⭐', '❤️', '🍎', '🐶']
+export const PATTERN_EMOJIS = [
+  '🔴', '🔵', '🟡', '🟢', '🟣', '🟠', '🟤', '⚫', '⚪',
+  '❤️', '💙', '💚', '💛', '🧡', '💜', '⭐', '🌸', '🍎',
+]
 
 // The full Romanian alphabet (31 letters) for the Letters game.
 export const LETTERS = [
@@ -64,12 +108,16 @@ export const LETTERS = [
 // Digits for the Numbers game.
 export const DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-// Disjoint groups for the "odd one out by category" game.
+// Disjoint groups for the Sorting game and the "odd one out by category" game.
 export const CATEGORIES: string[][] = [
-  ['🐶', '🐱', '🐮', '🐷', '🐰', '🦁', '🐸', '🐴'], // animals
-  ['🍎', '🍌', '🍓', '🍇', '🍊', '🍉', '🍐', '🍒'], // fruit
-  ['🚗', '🚕', '🚌', '🚓', '🚑', '🚒', '✈️', '🚀'], // vehicles
-  ['🌸', '🌼', '🌻', '🌷', '🌹', '🌵'], // plants
+  ['🐶', '🐱', '🐮', '🐷', '🐰', '🦁', '🐸', '🐴', '🐵', '🐔', '🐘', '🐯'], // animals
+  ['🍎', '🍌', '🍓', '🍇', '🍊', '🍉', '🍐', '🍒', '🍑', '🥝', '🍍', '🥭'], // fruit
+  ['🚗', '🚕', '🚌', '🚓', '🚑', '🚒', '✈️', '🚀', '🚲', '🚚', '🚁', '🏍️'], // vehicles
+  ['🌸', '🌼', '🌻', '🌷', '🌹', '🌵', '🌳', '🍀', '🌴', '🌲'], // plants
+  ['🍕', '🍔', '🍟', '🌭', '🍩', '🍪', '🎂', '🍦', '🧁', '🍫'], // food
+  ['👕', '👗', '👖', '🧥', '🧦', '🧢', '🥾', '🧤', '👔', '👟'], // clothes
+  ['🐟', '🐬', '🐳', '🦈', '🐙', '🦀', '🦞', '🐚', '🦑', '🐠'], // sea
+  ['🐝', '🦋', '🐛', '🐜', '🐞', '🦗', '🕷️', '🐌'], // insects
 ]
 
 // Musical instruments for the Music game (each plays a real sound clip).
@@ -81,4 +129,7 @@ export const INSTRUMENTS: InstrumentItem[] = [
   { emoji: '🎻', slug: 'violin' },
   { emoji: '🪈', slug: 'flute' },
   { emoji: '🎷', slug: 'sax' },
+  { emoji: '🪗', slug: 'accordion' },
+  { emoji: '🪕', slug: 'banjo' },
+  { emoji: '🥁', slug: 'drum' },
 ]

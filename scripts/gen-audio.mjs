@@ -15,7 +15,6 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { COLORS, SHAPES, LETTERS, DIGITS } from '../src/data/content.ts'
-import { STICKERS } from '../src/data/stickers.ts'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(HERE, '..')
@@ -95,6 +94,9 @@ OVERRIDES['Ce mănâncă?'] = { length: 1.5, synth: 'Ce mănâncă.' }
 // Sizes words — short, so clean ending + a little slower.
 OVERRIDES['cel mare'] = { length: 1.4, synth: 'cel mare.' }
 OVERRIDES['cel mic'] = { length: 1.4, synth: 'cel mic.' }
+// "triunghi" gets mangled ("triundi") as one token; lean on the known word
+// "unghi" (hard g before i) by splitting: "tri-unghi".
+OVERRIDES['triunghi'] = { synth: 'tri-unghi' }
 
 function piperSynth(text, wav, length) {
   execFileSync(PIPER_BIN, ['--model', PIPER_MODEL, '--length_scale', String(length), '--sentence_silence', '0.45', '--output_file', wav], { input: text })
@@ -145,14 +147,12 @@ SHAPES.forEach((s) => phrases.add(s.name))
 LETTERS.forEach((l) => phrases.add(l)) // spoken as Romanian letter names
 DIGITS.forEach((d) => phrases.add(d)) // spoken as Romanian number names
 // Animals play REAL sound effects (see below), not spoken onomatopoeia.
-STICKERS.forEach((s) => phrases.add(s.name)) // spoken when tapped in the collection
-for (let h = 0; h <= STICKERS.length; h++) phrases.add(`Colecția mea. ${h} din ${STICKERS.length}.`)
 ;[
   // game intros (spoken once on entry)
   'Apasă pe culoarea',
   'Găsește forma de',
   'Cine face?',
-  'Apasă pe numărul de fructe',
+  'Apasă pe numărul potrivit',
   'Găsește umbra',
   'Apasă pe obiectul',
   'cel mare',
@@ -189,7 +189,6 @@ for (let h = 0; h <= STICKERS.length; h++) phrases.add(`Colecția mea. ${h} din 
   'Mai încearcă',
   'Găsește perechile',
   'Bravo! Ai reușit!',
-  'Colecția mea',
   // game titles (spoken when a game starts)
   'Culori',
   'Numărăm',
@@ -245,6 +244,11 @@ const ANIMAL_SOUND_FILES = {
   cal: 'horse',
   porc: 'pig',
   broască: 'frog',
+  cocoș: 'rooster',
+  elefant: 'elephant',
+  leu: 'lion',
+  bufniță: 'owl',
+  lup: 'wolf',
 }
 for (const [name, slug] of Object.entries(ANIMAL_SOUND_FILES)) {
   const src = join(HERE, 'assets', 'animals', `${slug}.mp3`)
@@ -275,7 +279,7 @@ for (const d of DIGITS) {
 }
 
 // --- Instrument note clips (FluidR3_GM soundfont; see public/CREDITS.md) ---
-for (const slug of ['piano', 'guitar', 'trumpet', 'violin', 'flute', 'sax']) {
+for (const slug of ['piano', 'guitar', 'trumpet', 'violin', 'flute', 'sax', 'accordion', 'banjo', 'drum']) {
   const src = join(HERE, 'assets', 'instruments', `${slug}.mp3`)
   if (!existsSync(src)) continue
   const key = `sound:${slug}`
