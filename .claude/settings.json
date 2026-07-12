@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/detect-diffs.mjs)",
+      "Bash(ffmpeg -y -loglevel error -i /home/raz/workspace/kids-games/public/puzzles/diff/valley_a.jpg -i /home/raz/workspace/kids-games/public/puzzles/diff/valley_b.jpg -filter_complex '[0]scale=240:300[a];[1]scale=240:300[b];[a][b]hstack' /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/sbs_valley.png)",
+      "Bash(ffmpeg -y -loglevel error -i /home/raz/workspace/kids-games/public/puzzles/diff/valley_a.jpg -i /home/raz/workspace/kids-games/public/puzzles/diff/valley_b.jpg -filter_complex [0][1]blend=all_mode=difference,format=gray,boxblur=2,eq=contrast=9:brightness=0.04,scale=260:-1 /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/dm_valley2.png)",
+      "Bash(sed -i \"s/const MERGE = 26.*/const MERGE = 62/; s/const MIN_AREA = 22.*/const MIN_AREA = 30/\" detect-diffs.mjs)",
+      "Bash(sed -i \"s#{ slug: 'city'.*#\\\\# city excluded \\(separate image, not a pair\\)#\" detect-diffs.mjs)",
+      "Bash(node detect-diffs.mjs)",
+      "Bash(ffmpeg -y -loglevel error -i /home/raz/Pictures/kids-art/image2.jpg -vf \"scale=720:900:force_original_aspect_ratio=increase,crop=720:900\" -q:v 3 public/puzzles/city.jpg)"
+    ]
+  }
+}

@@ -2,72 +2,48 @@ import { useEffect, useState, MouseEvent } from 'react'
 import { TopBar } from '../components/TopBar'
 import { DoneScreen } from '../components/DoneScreen'
 import { Reward } from '../components/Reward'
-import { GameProps, pick, ROUNDS_PER_GAME, sample } from '../lib/game'
+import { GameProps, shuffle } from '../lib/game'
 import { speak, successChime, wrongBuzz } from '../lib/audio'
-import { COLORS, draw, SCENE, SceneBg, SceneDefs, VH, VW } from './sceneArt'
+import { DIFF_PAIRS } from './diffPairs'
 
+// Two versions of the same picture side by side; tap the spots that differ.
 const INTRO = 'Găsește diferențele'
-const LEVELS = [2, 3, 4] // differences per level
-const TOL_X = 9
-const TOL_Y = 11
-
-type Diff = { id: string; recolor?: string } // recolor set => changed colour; else removed
-type Board = { diffs: Diff[] }
-
-function makeBoard(n: number): Board {
-  const chosen = sample(SCENE, n)
-  const diffs = chosen.map((it) => {
-    const canRecolor = ['tree', 'flower', 'balloon', 'butterfly', 'bird', 'apple'].includes(it.kind)
-    if (canRecolor && Math.random() < 0.5) {
-      let c = pick(COLORS)
-      while (c === it.color) c = pick(COLORS)
-      return { id: it.id, recolor: c }
-    }
-    return { id: it.id }
-  })
-  return { diffs }
-}
+// One round per pair, in a shuffled order, so no picture repeats in a session.
+const ROUNDS = DIFF_PAIRS.length
 
 export function SpotDifference({ onBack }: GameProps) {
-  const [level, setLevel] = useState(0)
   const [index, setIndex] = useState(0)
-  const [board, setBoard] = useState<Board>(() => makeBoard(LEVELS[0]))
-  const [found, setFound] = useState<Set<string>>(new Set())
+  const [order, setOrder] = useState<number[]>(() => shuffle(DIFF_PAIRS.map((_, i) => i)))
+  const [found, setFound] = useState<Set<number>>(new Set())
   const [reward, setReward] = useState(false)
   const [wrong, setWrong] = useState(false)
-  const done = index >= ROUNDS_PER_GAME
+  const done = index >= ROUNDS
+  const pair = DIFF_PAIRS[order[index % order.length]]
 
   useEffect(() => {
     if (!done && index === 0) speak(INTRO)
-  }, [board, done])
-
-  function newBoard(l: number) {
-    setBoard(makeBoard(LEVELS[l]))
-    setFound(new Set())
-  }
+  }, [index, done])
 
   function clickScene(e: MouseEvent<HTMLDivElement>) {
     if (reward) return
     const rect = e.currentTarget.getBoundingClientRect()
-    const px = ((e.clientX - rect.left) / rect.width) * VW
-    const py = ((e.clientY - rect.top) / rect.height) * VH
-    const hit = board.diffs.find((d) => {
-      if (found.has(d.id)) return false
-      const it = SCENE.find((s) => s.id === d.id)!
-      return Math.abs(px - it.x) < TOL_X && Math.abs(py - it.y) < TOL_Y
-    })
-    if (hit) {
+    const px = (e.clientX - rect.left) / rect.width
+    const py = (e.clientY - rect.top) / rect.height
+    const hit = pair.diffs.findIndex(
+      (d, i) => !found.has(i) && Math.hypot(px - d.x, py - d.y) < d.r
+    )
+    if (hit >= 0) {
       const nf = new Set(found)
-      nf.add(hit.id)
+      nf.add(hit)
       setFound(nf)
       successChime()
-      if (nf.size === board.diffs.length) {
+      if (nf.size === pair.diffs.length) {
         setReward(true)
         setTimeout(() => {
           setReward(false)
+          setFound(new Set())
           setIndex((n) => n + 1)
-          newBoard(level)
-        }, 1200)
+        }, 1300)
       }
     } else {
       wrongBuzz()
@@ -79,36 +55,30 @@ export function SpotDifference({ onBack }: GameProps) {
 
   function restart() {
     setIndex(0)
-    newBoard(level)
-  }
-  function nextLevel() {
-    const nl = Math.min(level + 1, LEVELS.length - 1)
-    setLevel(nl)
-    setIndex(0)
-    newBoard(nl)
+    setOrder(shuffle(DIFF_PAIRS.map((_, i) => i)))
+    setFound(new Set())
   }
 
-  function scene(side: 'a' | 'b') {
-    const diffById = new Map(board.diffs.map((d) => [d.id, d]))
+  function scene(src: string) {
     return (
       <div className={'scene' + (wrong ? ' wrong' : '')} onClick={clickScene}>
-        <svg viewBox={`0 0 ${VW} ${VH}`} className="scene-svg">
-          <SceneBg />
-          {SCENE.map((it) => {
-            const d = diffById.get(it.id)
-            if (side === 'b' && d && !d.recolor) return null
-            const color = side === 'b' && d?.recolor ? d.recolor : it.color
-            return (
-              <g key={it.id} transform={`translate(${it.x} ${it.y}) scale(${it.scale ?? 1})`}>
-                {draw(it.kind, color)}
-              </g>
-            )
-          })}
-          {[...found].map((id) => {
-            const it = SCENE.find((s) => s.id === id)!
-            return <circle key={id} cx={it.x} cy={it.y} r={11} className="scene-ring" />
-          })}
-        </svg>
+        <div className="scene-img" style={{ backgroundImage: `url(${src})` }} />
+        {[...found].map((i) => {
+          const d = pair.diffs[i]
+          return (
+            <div
+              key={i}
+              className="spot-ring"
+              style={{
+                left: `${d.x * 100}%`,
+                top: `${d.y * 100}%`,
+                width: `${d.r * 150}%`,
+                height: 'auto',
+                aspectRatio: '1',
+              }}
+            />
+          )
+        })}
       </div>
     )
   }
@@ -118,20 +88,13 @@ export function SpotDifference({ onBack }: GameProps) {
       <TopBar
         title="Diferențe"
         onBack={onBack}
-        total={ROUNDS_PER_GAME}
+        total={ROUNDS}
         index={index}
         onReplay={done ? undefined : () => speak(INTRO)}
         hideTitle
       />
-      <SceneDefs />
       {done ? (
-        <DoneScreen
-          onAgain={restart}
-          onHome={onBack}
-          onContinue={level < LEVELS.length - 1 ? nextLevel : undefined}
-          level={level + 1}
-          maxLevel={LEVELS.length}
-        />
+        <DoneScreen onAgain={restart} onHome={onBack} level={1} maxLevel={1} />
       ) : (
         <div className="game-body">
           <button className="prompt" onClick={() => speak(INTRO)}>
@@ -140,14 +103,14 @@ export function SpotDifference({ onBack }: GameProps) {
             </span>
             Găsește diferențele
           </button>
-          <div className="diff-progress" aria-label={`${found.size} din ${board.diffs.length}`}>
-            {board.diffs.map((_, i) => (
+          <div className="diff-progress" aria-label={`${found.size} din ${pair.diffs.length}`}>
+            {pair.diffs.map((_, i) => (
               <span key={i} className={'diff-dot' + (i < found.size ? ' on' : '')} />
             ))}
           </div>
           <div className="spot-pair">
-            {scene('a')}
-            {scene('b')}
+            {scene(pair.a)}
+            {scene(pair.b)}
           </div>
         </div>
       )}

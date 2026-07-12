@@ -2,9 +2,9 @@ import { useEffect, useRef, useState, PointerEvent as RPointerEvent } from 'reac
 import { TopBar } from '../components/TopBar'
 import { DoneScreen } from '../components/DoneScreen'
 import { Reward } from '../components/Reward'
-import { GameProps, ROUNDS_PER_GAME, sample } from '../lib/game'
+import { GameProps, ROUNDS_PER_GAME, sample, shuffle } from '../lib/game'
 import { speak, successChime, wrongBuzz } from '../lib/audio'
-import { draw, SCENE, SceneBg, SceneDefs, VH, VW } from './sceneArt'
+import { PHOTOS } from './photoScenes'
 
 // The picture stays whole. Each tray piece is an exact rectangular crop of it;
 // the child searches the picture for where that crop belongs and drops it there.
@@ -12,42 +12,36 @@ const INTRO = 'Găsește locul potrivit al fiecărei imagini'
 const LEVELS = [3, 4, 5] // pieces per level
 const COLS = 3
 const ROWS = 3
-const CW = VW / COLS
-const CH = VH / ROWS
+const CELLS = Array.from({ length: COLS * ROWS }, (_, i) => i)
 
 const colOf = (c: number) => c % COLS
 const rowOf = (c: number) => Math.floor(c / COLS)
-const cellOf = (x: number, y: number) =>
-  Math.min(ROWS - 1, Math.floor(y / CH)) * COLS + Math.min(COLS - 1, Math.floor(x / CW))
-// Only cut cells that contain something recognisable (not empty sky).
-const ELIGIBLE = [...new Set(SCENE.map((s) => cellOf(s.x, s.y)))]
+// Background position (%) that shows just this cell when background-size is 300%.
+const bgPos = (c: number) => `${colOf(c) * 50}% ${rowOf(c) * 50}%`
 
-function SceneObjects() {
-  return (
-    <>
-      <SceneBg />
-      {SCENE.map((it) => (
-        <g key={it.id} transform={`translate(${it.x} ${it.y}) scale(${it.scale ?? 1})`}>
-          {draw(it.kind, it.color)}
-        </g>
-      ))}
-    </>
-  )
+function cellAt(fx: number, fy: number) {
+  const col = Math.min(COLS - 1, Math.max(0, Math.floor(fx * COLS)))
+  const row = Math.min(ROWS - 1, Math.max(0, Math.floor(fy * ROWS)))
+  return row * COLS + col
 }
 
-// A piece = the whole scene cropped (via viewBox) to one cell.
-function Piece({ cell }: { cell: number }) {
+function Piece({ img, cell }: { img: string; cell: number }) {
   return (
-    <svg viewBox={`${colOf(cell) * CW} ${rowOf(cell) * CH} ${CW} ${CH}`} className="piece-svg">
-      <SceneObjects />
-    </svg>
+    <div
+      className="piece-img"
+      style={{ backgroundImage: `url(${img})`, backgroundPosition: bgPos(cell) }}
+    />
   )
 }
 
 export function Puzzle({ onBack }: GameProps) {
   const [level, setLevel] = useState(0)
   const [index, setIndex] = useState(0)
-  const [pieces, setPieces] = useState<number[]>(() => sample(ELIGIBLE, LEVELS[0]))
+  // A shuffled deck dealt one photo per round across the whole session (levels
+  // included); it only reshuffles once every photo has been used.
+  const [deck, setDeck] = useState(() => ({ order: shuffle(PHOTOS), pos: 0 }))
+  const img = deck.order[deck.pos]
+  const [pieces, setPieces] = useState<number[]>(() => sample(CELLS, LEVELS[0]))
   const [placed, setPlaced] = useState<Set<number>>(new Set())
   const [dragCell, setDragCell] = useState<number | null>(null)
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 })
@@ -60,8 +54,19 @@ export function Puzzle({ onBack }: GameProps) {
     if (!done && index === 0) speak(INTRO)
   }, [pieces, done])
 
+  // Deal the next photo; reshuffle only when the deck runs out (avoiding an
+  // immediate repeat of the photo that was just shown).
+  function dealNext() {
+    setDeck(({ order, pos }) => {
+      if (pos + 1 < order.length) return { order, pos: pos + 1 }
+      let next = shuffle(PHOTOS)
+      if (next[0] === order[pos]) next = [...next.slice(1), next[0]]
+      return { order: next, pos: 0 }
+    })
+  }
+
   function newRound(l: number) {
-    setPieces(sample(ELIGIBLE, LEVELS[l]))
+    setPieces(sample(CELLS, LEVELS[l]))
     setPlaced(new Set())
     setDragCell(null)
   }
@@ -76,6 +81,7 @@ export function Puzzle({ onBack }: GameProps) {
         setTimeout(() => {
           setReward(false)
           setIndex((n) => n + 1)
+          dealNext()
           newRound(level)
         }, 1200)
       }
@@ -93,9 +99,9 @@ export function Puzzle({ onBack }: GameProps) {
       const rect = bigRef.current?.getBoundingClientRect()
       let ok = false
       if (rect) {
-        const vx = ((e.clientX - rect.left) / rect.width) * VW
-        const vy = ((e.clientY - rect.top) / rect.height) * VH
-        if (vx >= 0 && vx < VW && vy >= 0 && vy < VH) ok = cellOf(vx, vy) === active
+        const fx = (e.clientX - rect.left) / rect.width
+        const fy = (e.clientY - rect.top) / rect.height
+        if (fx >= 0 && fx < 1 && fy >= 0 && fy < 1) ok = cellAt(fx, fy) === active
       }
       setDragCell(null)
       if (ok) place(active)
@@ -122,12 +128,14 @@ export function Puzzle({ onBack }: GameProps) {
 
   function restart() {
     setIndex(0)
+    setDeck({ order: shuffle(PHOTOS), pos: 0 })
     newRound(level)
   }
   function nextLevel() {
     const nl = Math.min(level + 1, LEVELS.length - 1)
     setLevel(nl)
     setIndex(0)
+    dealNext()
     newRound(nl)
   }
 
@@ -143,7 +151,6 @@ export function Puzzle({ onBack }: GameProps) {
         onReplay={done ? undefined : () => speak(INTRO)}
         hideTitle
       />
-      <SceneDefs />
       {done ? (
         <DoneScreen
           onAgain={restart}
@@ -173,21 +180,19 @@ export function Puzzle({ onBack }: GameProps) {
                   className={'puzzle-piece' + (wrongCell === c ? ' shake' : '') + (dragCell === c ? ' dragging' : '')}
                   onPointerDown={(e) => startDrag(c, e)}
                 >
-                  <Piece cell={c} />
+                  <Piece img={img} cell={c} />
                 </div>
               ))}
             </div>
             <div className="scene" ref={bigRef}>
-              <svg viewBox={`0 0 ${VW} ${VH}`} className="scene-svg">
-                <SceneObjects />
-              </svg>
+              <div className="scene-img" style={{ backgroundImage: `url(${img})` }} />
             </div>
           </div>
         </div>
       )}
       {dragCell !== null && (
         <div className="drag-ghost" style={{ left: dragPos.x, top: dragPos.y }}>
-          <Piece cell={dragCell} />
+          <Piece img={img} cell={dragCell} />
         </div>
       )}
       <Reward show={reward} />
