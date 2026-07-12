@@ -18,6 +18,12 @@ const EASY_GAMES: GameCard[] = [
   { id: 'moreless', title: 'Mai mult', emoji: '⚖️', color: '#37b24d' },
   { id: 'odd', title: 'Intrusul', emoji: '🕵️', color: '#6741d9' },
   { id: 'music', title: 'Muzică', emoji: '🎸', color: '#c2255c' },
+  { id: 'body', title: 'Corpul meu', emoji: '👃', color: '#e64980' },
+  { id: 'emotions', title: 'Emoții', emoji: '😀', color: '#f59f00' },
+  { id: 'weather', title: 'Vremea', emoji: '☀️', color: '#4dabf7' },
+  { id: 'vehicles', title: 'Vehicule', emoji: '🚗', color: '#e8590c' },
+  { id: 'jobs', title: 'Meserii', emoji: '🧑‍🚒', color: '#0ca678' },
+  { id: 'opposites', title: 'Opuse', emoji: '↔️', color: '#7048e8' },
 ]
 
 const MEDIUM_GAMES: GameCard[] = [

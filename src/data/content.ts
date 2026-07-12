@@ -161,3 +161,83 @@ export const INSTRUMENTS: InstrumentItem[] = [
   { emoji: '🥁', slug: 'drum' },
   { emoji: '🔔', slug: 'bell' },
 ]
+
+// --- Topic games (listen & tap): each item's `name` is spoken and is the answer
+// key; `emoji` is what's shown. Names use the article/agreement of the prompt.
+export type PickItem = { name: string; emoji: string }
+
+// Corpul meu — "Atinge {name}"
+export const BODY_PARTS: PickItem[] = [
+  { name: 'nasul', emoji: '👃' },
+  { name: 'urechea', emoji: '👂' },
+  { name: 'ochiul', emoji: '👀' },
+  { name: 'gura', emoji: '👄' },
+  { name: 'mâna', emoji: '✋' },
+  { name: 'piciorul', emoji: '🦶' },
+  { name: 'dintele', emoji: '🦷' },
+  { name: 'limba', emoji: '👅' },
+]
+
+// Emoții — "Atinge fața {name}" (feminine, agrees with "fața")
+export const EMOTIONS: PickItem[] = [
+  { name: 'fericită', emoji: '😀' },
+  { name: 'tristă', emoji: '😢' },
+  { name: 'supărată', emoji: '😠' },
+  { name: 'speriată', emoji: '😨' },
+  { name: 'surprinsă', emoji: '😲' },
+  { name: 'somnoroasă', emoji: '😴' },
+]
+
+// Vremea & anotimpuri — "Găsește {name}"
+export const WEATHER: PickItem[] = [
+  { name: 'soarele', emoji: '☀️' },
+  { name: 'ploaia', emoji: '🌧️' },
+  { name: 'norii', emoji: '☁️' },
+  { name: 'ninsoarea', emoji: '❄️' },
+  { name: 'curcubeul', emoji: '🌈' },
+  { name: 'furtuna', emoji: '⛈️' },
+  { name: 'primăvara', emoji: '🌷' },
+  { name: 'vara', emoji: '🏖️' },
+  { name: 'toamna', emoji: '🍂' },
+  { name: 'iarna', emoji: '⛄' },
+]
+
+// Vehicule — "Găsește {name}"
+export const VEHICLES: PickItem[] = [
+  { name: 'mașina', emoji: '🚗' },
+  { name: 'autobuzul', emoji: '🚌' },
+  { name: 'trenul', emoji: '🚂' },
+  { name: 'avionul', emoji: '✈️' },
+  { name: 'barca', emoji: '⛵' },
+  { name: 'bicicleta', emoji: '🚲' },
+  { name: 'elicopterul', emoji: '🚁' },
+  { name: 'camionul', emoji: '🚚' },
+  { name: 'racheta', emoji: '🚀' },
+  { name: 'tractorul', emoji: '🚜' },
+]
+
+// Meserii — "Găsește {name}"
+export const JOBS: PickItem[] = [
+  { name: 'doctorul', emoji: '🧑‍⚕️' },
+  { name: 'pompierul', emoji: '🧑‍🚒' },
+  { name: 'polițistul', emoji: '👮' },
+  { name: 'bucătarul', emoji: '🧑‍🍳' },
+  { name: 'profesorul', emoji: '🧑‍🏫' },
+  { name: 'fermierul', emoji: '🧑‍🌾' },
+  { name: 'astronautul', emoji: '🧑‍🚀' },
+  { name: 'pictorul', emoji: '🧑‍🎨' },
+]
+
+// Opuse — "Găsește ce e {name}"
+export const OPPOSITES: PickItem[] = [
+  { name: 'mare', emoji: '🐘' },
+  { name: 'mic', emoji: '🐭' },
+  { name: 'cald', emoji: '🔥' },
+  { name: 'rece', emoji: '🧊' },
+  { name: 'sus', emoji: '🔼' },
+  { name: 'jos', emoji: '🔽' },
+  { name: 'rapid', emoji: '🐇' },
+  { name: 'încet', emoji: '🐢' },
+  { name: 'vesel', emoji: '😀' },
+  { name: 'trist', emoji: '😢' },
+]

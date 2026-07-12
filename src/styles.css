@@ -16,11 +16,21 @@ body,
   margin: 0;
 }
 
+/* Gradient lives on <html> and is fixed to the viewport so it always covers the
+   full screen on mobile — no strip of the browser's background colour shows at
+   the bottom when the address bar hides or in standalone (PWA) mode. */
+html {
+  background-color: #bde0fe;
+  background-image: linear-gradient(160deg, #ffe9a8, #bde0fe 55%, #ffc8dd);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
 body {
   font-family: 'Baloo 2', ui-rounded, 'Segoe UI Rounded', 'Segoe UI', system-ui,
     -apple-system, sans-serif;
   color: var(--ink);
-  background: linear-gradient(160deg, #ffe9a8, #bde0fe 55%, #ffc8dd);
+  background: transparent;
   -webkit-user-select: none;
   user-select: none;
   overflow: hidden;
@@ -124,16 +134,26 @@ button:focus-visible {
   padding: 12px clamp(12px, 3vw, 26px);
 }
 .back {
-  font-size: 26px;
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+  border: 2px solid #ece9f6;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08), 0 6px 14px rgba(0, 0, 0, 0.12);
+  color: var(--purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: none;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.back svg {
+  width: 26px;
+  height: 26px;
 }
 .back:active {
   transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 8px rgba(0, 0, 0, 0.12);
 }
 .replay {
   font-size: 26px;
@@ -1167,8 +1187,9 @@ button:focus-visible {
 .piano {
   display: flex;
   gap: 4px;
-  width: min(94vw, 600px);
-  height: min(44vh, 380px);
+  width: min(94vw, 560px);
+  /* Height scales with width so keys keep sane proportions on phones. */
+  height: clamp(150px, 40vw, 260px);
   padding: 10px;
 }
 .key {
@@ -1250,8 +1271,8 @@ button:focus-visible {
   gap: clamp(4px, 1.4vw, 10px);
   align-items: flex-start;
   justify-content: center;
-  width: min(94vw, 600px);
-  height: min(50vh, 460px);
+  width: min(94vw, 560px);
+  height: clamp(170px, 46vw, 320px);
   padding: 10px;
 }
 .xylo-bar {

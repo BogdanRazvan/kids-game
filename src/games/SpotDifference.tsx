@@ -29,9 +29,13 @@ export function SpotDifference({ onBack }: GameProps) {
     const rect = e.currentTarget.getBoundingClientRect()
     const px = (e.clientX - rect.left) / rect.width
     const py = (e.clientY - rect.top) / rect.height
-    const hit = pair.diffs.findIndex(
-      (d, i) => !found.has(i) && Math.hypot(px - d.x, py - d.y) < d.r
-    )
+    const hit = pair.diffs.findIndex((d, i) => {
+      if (found.has(i)) return false
+      // Elliptical hit test: circle when ry is omitted (ry defaults to r).
+      const nx = (px - d.x) / d.r
+      const ny = (py - d.y) / (d.ry ?? d.r)
+      return nx * nx + ny * ny < 1
+    })
     if (hit >= 0) {
       const nf = new Set(found)
       nf.add(hit)
@@ -65,6 +69,7 @@ export function SpotDifference({ onBack }: GameProps) {
         <div className="scene-img" style={{ backgroundImage: `url(${src})` }} />
         {[...found].map((i) => {
           const d = pair.diffs[i]
+          const ellipse = d.ry != null
           return (
             <div
               key={i}
@@ -73,8 +78,9 @@ export function SpotDifference({ onBack }: GameProps) {
                 left: `${d.x * 100}%`,
                 top: `${d.y * 100}%`,
                 width: `${d.r * 150}%`,
-                height: 'auto',
-                aspectRatio: '1',
+                ...(ellipse
+                  ? { height: `${d.ry! * 150}%` }
+                  : { height: 'auto', aspectRatio: '1' }),
               }}
             />
           )

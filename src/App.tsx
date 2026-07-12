@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { stopAllSound } from './lib/audio'
 import { Home } from './components/Home'
 import { Colors } from './games/Colors'
 import { Counting } from './games/Counting'
@@ -29,6 +30,7 @@ import { Coloring } from './games/Coloring'
 import { Paint } from './games/Paint'
 import { Bubbles } from './games/Bubbles'
 import { Instruments } from './games/Instruments'
+import { BodyParts, Emotions, Weather, Vehicles, Jobs, Opposites } from './games/PickTopics'
 
 export type GameId =
   | 'colors'
@@ -60,15 +62,26 @@ export type GameId =
   | 'paint'
   | 'bubbles'
   | 'instruments'
+  | 'body'
+  | 'emotions'
+  | 'weather'
+  | 'vehicles'
+  | 'jobs'
+  | 'opposites'
 type Screen = 'home' | GameId
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
-  const back = () => setScreen('home')
+  // Any screen change silences whatever the previous screen was playing.
+  const go = (s: Screen) => {
+    stopAllSound()
+    setScreen(s)
+  }
+  const back = () => go('home')
 
   return (
     <div className="app">
-      {screen === 'home' && <Home onPick={setScreen} />}
+      {screen === 'home' && <Home onPick={go} />}
       {screen === 'colors' && <Colors onBack={back} />}
       {screen === 'counting' && <Counting onBack={back} />}
       {screen === 'shapes' && <Shapes onBack={back} />}
@@ -98,6 +111,12 @@ export default function App() {
       {screen === 'paint' && <Paint onBack={back} />}
       {screen === 'bubbles' && <Bubbles onBack={back} />}
       {screen === 'instruments' && <Instruments onBack={back} />}
+      {screen === 'body' && <BodyParts onBack={back} />}
+      {screen === 'emotions' && <Emotions onBack={back} />}
+      {screen === 'weather' && <Weather onBack={back} />}
+      {screen === 'vehicles' && <Vehicles onBack={back} />}
+      {screen === 'jobs' && <Jobs onBack={back} />}
+      {screen === 'opposites' && <Opposites onBack={back} />}
     </div>
   )
 }

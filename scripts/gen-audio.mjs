@@ -14,7 +14,7 @@ import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { COLORS, SHAPES, LETTERS, DIGITS } from '../src/data/content.ts'
+import { COLORS, SHAPES, LETTERS, DIGITS, BODY_PARTS, EMOTIONS, WEATHER, VEHICLES, JOBS, OPPOSITES } from '../src/data/content.ts'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(HERE, '..')
@@ -146,10 +146,18 @@ COLORS.forEach((c) => phrases.add(c.name))
 SHAPES.forEach((s) => phrases.add(s.name))
 LETTERS.forEach((l) => phrases.add(l)) // spoken as Romanian letter names
 DIGITS.forEach((d) => phrases.add(d)) // spoken as Romanian number names
+// Topic games speak each item's name per round.
+;[BODY_PARTS, EMOTIONS, WEATHER, VEHICLES, JOBS, OPPOSITES].forEach((list) =>
+  list.forEach((it) => phrases.add(it.name))
+)
 // Animals play REAL sound effects (see below), not spoken onomatopoeia.
 ;[
   // game intros (spoken once on entry)
   'Apasă pe culoarea',
+  'Atinge',
+  'Atinge fața',
+  'Găsește',
+  'Găsește ce e',
   'Găsește forma de',
   'Cine face?',
   'Apasă pe numărul potrivit',

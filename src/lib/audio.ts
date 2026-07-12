@@ -15,6 +15,33 @@ function ac(): AudioContext | null {
   }
 }
 
+// All synth/sample output goes through one master bus so it can be cut at once
+// (e.g. when leaving a game). Disconnecting it silences everything instantly;
+// the next sound lazily builds a fresh bus.
+let master: GainNode | null = null
+function bus(): GainNode | null {
+  const c = ac()
+  if (!c) return null
+  if (!master) {
+    master = c.createGain()
+    master.connect(c.destination)
+  }
+  return master
+}
+
+// Stop every sound: the spoken clip queue and all live Web Audio.
+export function stopAllSound(): void {
+  stopClips()
+  if (master) {
+    try {
+      master.disconnect()
+    } catch {
+      /* already gone */
+    }
+    master = null
+  }
+}
+
 export function tone(
   freq: number,
   dur = 0.15,
@@ -33,7 +60,7 @@ export function tone(
   g.gain.linearRampToValueAtTime(gain, t + 0.02)
   g.gain.exponentialRampToValueAtTime(0.0001, t + dur)
   osc.connect(g)
-  g.connect(c.destination)
+  g.connect(bus() || c.destination)
   osc.start(t)
   osc.stop(t + dur + 0.03)
 }
@@ -71,7 +98,7 @@ export function noiseBurst(
   g.gain.setValueAtTime(gain, t)
   g.gain.exponentialRampToValueAtTime(0.0001, t + dur)
   node.connect(g)
-  g.connect(c.destination)
+  g.connect(bus() || c.destination)
   src.start(t)
   src.stop(t + dur + 0.02)
 }
@@ -89,7 +116,7 @@ export function boom(startF: number, endF: number, dur: number, gain = 0.28, whe
   g.gain.setValueAtTime(gain, t)
   g.gain.exponentialRampToValueAtTime(0.0001, t + dur)
   o.connect(g)
-  g.connect(c.destination)
+  g.connect(bus() || c.destination)
   o.start(t)
   o.stop(t + dur + 0.03)
 }
@@ -127,7 +154,7 @@ export function playBuffer(buf: AudioBuffer, gain = 1, rate = 1): void {
   const g = c.createGain()
   g.gain.value = gain
   src.connect(g)
-  g.connect(c.destination)
+  g.connect(bus() || c.destination)
   src.start()
 }
 

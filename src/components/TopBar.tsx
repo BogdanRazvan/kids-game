@@ -11,7 +11,10 @@ export function TopBar({ title, onBack, total, index, onReplay, hideTitle }: Pro
   return (
     <header className="topbar">
       <button className="back" onClick={onBack} aria-label="Înapoi acasă">
-        ⬅
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M19 12 H7" />
+          <path d="M12 7 L7 12 L12 17" />
+        </svg>
       </button>
       {onReplay && (
         <button className="replay" onClick={onReplay} aria-label="Ascultă din nou">
