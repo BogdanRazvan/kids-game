@@ -3,7 +3,7 @@ export type AnimalItem = { name: string; emoji: string; sound: string }
 export type ShapeItem = { name: string; kind: ShapeKind; color: string }
 export type ShapeKind =
   | 'circle' | 'square' | 'triangle' | 'star' | 'heart'
-  | 'rectangle' | 'oval' | 'diamond'
+  | 'rectangle' | 'oval' | 'diamond' | 'pentagon' | 'hexagon' | 'crescent'
 
 export const COLORS: ColorItem[] = [
   { name: 'roșu', hex: '#e63946' },
@@ -17,6 +17,8 @@ export const COLORS: ColorItem[] = [
   { name: 'negru', hex: '#212529' },
   { name: 'alb', hex: '#f1f3f5' },
   { name: 'gri', hex: '#868e96' },
+  { name: 'turcoaz', hex: '#0fb9b1' },
+  { name: 'bej', hex: '#d4b483' },
 ]
 
 export const ANIMALS: AnimalItem[] = [
@@ -33,6 +35,8 @@ export const ANIMALS: AnimalItem[] = [
   { name: 'leu', emoji: '🦁', sound: 'rrr' },
   { name: 'bufniță', emoji: '🦉', sound: 'hu hu' },
   { name: 'lup', emoji: '🐺', sound: 'auuu' },
+  { name: 'capră', emoji: '🐐', sound: 'meee' },
+  { name: 'maimuță', emoji: '🐵', sound: 'uh uh' },
 ]
 
 export const SHAPES: ShapeItem[] = [
@@ -43,6 +47,9 @@ export const SHAPES: ShapeItem[] = [
   { name: 'dreptunghi', kind: 'rectangle', color: '#f59f00' },
   { name: 'oval', kind: 'oval', color: '#845ef7' },
   { name: 'romb', kind: 'diamond', color: '#0ca678' },
+  { name: 'pentagon', kind: 'pentagon', color: '#1098ad' },
+  { name: 'hexagon', kind: 'hexagon', color: '#e8590c' },
+  { name: 'semilună', kind: 'crescent', color: '#f59f00' },
 ]
 
 // The name (plural) is shown on the prompt; the child just counts what's drawn.
@@ -68,13 +75,25 @@ export const COUNT_ITEMS: CountItem[] = [
   { emoji: '❤️', name: 'inimioare' },
   { emoji: '🐞', name: 'buburuze' },
   { emoji: '🍄', name: 'ciuperci' },
+  { emoji: '🌟', name: 'steluțe' },
+  { emoji: '🍒', name: 'cireșe' },
+  { emoji: '🐤', name: 'puișori' },
+  { emoji: '🚀', name: 'rachete' },
+  { emoji: '🎁', name: 'cadouri' },
+  { emoji: '🍭', name: 'acadele' },
+  { emoji: '🐌', name: 'melci' },
+  { emoji: '🍦', name: 'înghețate' },
+  { emoji: '🦄', name: 'licorne' },
+  { emoji: '🚂', name: 'trenuri' },
 ]
 
 export const MEMORY_EMOJIS = [
   '🐶', '🐱', '🐮', '🦆', '🐸', '🦁', '🐰', '🐷',
   '🐵', '🐘', '🐯', '🐨', '🐻', '🦊', '🐼', '🐔',
   '🦋', '🐢', '🐝', '🦉', '🐧', '🦄', '🐴', '🐬',
-  '🦀', '🐙', '🦖', '🐳', '🦓', '🦒',
+  '🦀', '🐙', '🦖', '🐳', '🦓', '🦒', '🦝', '🦨',
+  '🦫', '🦔', '🐆', '🐫', '🦙', '🐇', '🐿️', '🦜',
+  '🦢', '🕊️', '🐄', '🐖',
 ]
 
 // Clearly-shaped objects for the Shadows, Different, Same and More/Less games.
@@ -84,19 +103,23 @@ export const OBJECT_EMOJIS = [
   '🚲', '🌙', '☂️', '🍄', '🐝', '🎁', '🔔', '🏠',
   '🌵', '🍦', '🐧', '🎸', '🦖', '🍕', '🥕', '🦉',
   '🐬', '🚁', '🦑', '🧁', '🍉', '🐞', '🦩', '🪁',
+  '🚂', '🎃', '🌂', '🏀', '🎾', '🍏', '🫖', '🧸',
+  '🔑', '⚓', '🏆', '🐍', '🦔', '🚜', '🎯', '🍭',
 ]
 
 // Same object shown at different sizes in the Big/Small game.
 export const SIZE_EMOJIS = [
   '🐘', '🐶', '🍎', '⭐', '🚗', '🐟', '🎈', '🌳', '🐰', '🍌',
   '🦋', '🐢', '🌸', '🚀', '⚽', '🍦', '🐝', '🐧', '🦀', '🍄',
-  '🐱', '🦁', '🎁', '🌵',
+  '🐱', '🦁', '🎁', '🌵', '🍔', '🎂', '🐞', '🦖', '🏀', '🧸',
+  '🌞', '🚂', '🌂', '🎃',
 ]
 
 // Colourful tokens for the Patterns game.
 export const PATTERN_EMOJIS = [
   '🔴', '🔵', '🟡', '🟢', '🟣', '🟠', '🟤', '⚫', '⚪',
   '❤️', '💙', '💚', '💛', '🧡', '💜', '⭐', '🌸', '🍎',
+  '🟥', '🟦', '🟨', '🟩', '🟪', '🟧',
 ]
 
 // The full Romanian alphabet (31 letters) for the Letters game.
@@ -118,6 +141,10 @@ export const CATEGORIES: string[][] = [
   ['👕', '👗', '👖', '🧥', '🧦', '🧢', '🥾', '🧤', '👔', '👟'], // clothes
   ['🐟', '🐬', '🐳', '🦈', '🐙', '🦀', '🦞', '🐚', '🦑', '🐠'], // sea
   ['🐝', '🦋', '🐛', '🐜', '🐞', '🦗', '🕷️', '🐌'], // insects
+  ['⚽', '🏀', '🎾', '🏈', '⚾', '🏐', '🏓', '🥊', '🏒', '🎳'], // sports
+  ['☀️', '🌧️', '⛅', '🌈', '❄️', '⚡', '🌪️', '🌙'], // weather
+  ['🔨', '🪚', '🔧', '🪛', '⛏️', '🔩', '🪓', '🧰'], // tools
+  ['🎸', '🎹', '🎺', '🥁', '🎻', '🪗', '🎷', '🪕'], // instruments
 ]
 
 // Musical instruments for the Music game (each plays a real sound clip).
@@ -132,4 +159,5 @@ export const INSTRUMENTS: InstrumentItem[] = [
   { emoji: '🪗', slug: 'accordion' },
   { emoji: '🪕', slug: 'banjo' },
   { emoji: '🥁', slug: 'drum' },
+  { emoji: '🔔', slug: 'bell' },
 ]

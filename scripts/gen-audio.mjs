@@ -164,7 +164,7 @@ DIGITS.forEach((d) => phrases.add(d)) // spoken as Romanian number names
   'Găsește cifra',
   'Găsește intrusul',
   'Găsește diferențele',
-  'Completează imaginea',
+  'Găsește locul potrivit al fiecărei imagini',
   'Care este rezultatul adunării?',
   'Ce număr lipsește?',
   'Ajută șoricelul să găsească brânza',
@@ -249,6 +249,8 @@ const ANIMAL_SOUND_FILES = {
   leu: 'lion',
   bufniță: 'owl',
   lup: 'wolf',
+  capră: 'goat',
+  maimuță: 'monkey',
 }
 for (const [name, slug] of Object.entries(ANIMAL_SOUND_FILES)) {
   const src = join(HERE, 'assets', 'animals', `${slug}.mp3`)
@@ -279,7 +281,7 @@ for (const d of DIGITS) {
 }
 
 // --- Instrument note clips (FluidR3_GM soundfont; see public/CREDITS.md) ---
-for (const slug of ['piano', 'guitar', 'trumpet', 'violin', 'flute', 'sax', 'accordion', 'banjo', 'drum']) {
+for (const slug of ['piano', 'guitar', 'trumpet', 'violin', 'flute', 'sax', 'accordion', 'banjo', 'drum', 'bell']) {
   const src = join(HERE, 'assets', 'instruments', `${slug}.mp3`)
   if (!existsSync(src)) continue
   const key = `sound:${slug}`

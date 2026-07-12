@@ -58,6 +58,24 @@ function ShapeSVG({ kind, color }: { kind: ShapeKind; color: string }) {
           <polygon points="50,8 88,50 50,92 12,50" fill={color} />
         </svg>
       )
+    case 'pentagon':
+      return (
+        <svg viewBox="0 0 100 100" className="shape">
+          <polygon points="50,8 91.8,38.4 75.9,87.6 24.1,87.6 8.1,38.4" fill={color} />
+        </svg>
+      )
+    case 'hexagon':
+      return (
+        <svg viewBox="0 0 100 100" className="shape">
+          <polygon points="50,6 88.1,28 88.1,72 50,94 11.9,72 11.9,28" fill={color} />
+        </svg>
+      )
+    case 'crescent':
+      return (
+        <svg viewBox="0 0 100 100" className="shape">
+          <path d="M64 14 A42 42 0 1 0 64 90 A32 32 0 1 1 64 14 Z" fill={color} />
+        </svg>
+      )
   }
 }
 
@@ -80,7 +98,7 @@ export function Shapes({ onBack }: GameProps) {
     <PickGame
       title="Forme"
       intro="Găsește forma de"
-      levelOptions={[3, 4, 5]}
+      levelOptions={[3, 4, 5, 6]}
       onBack={onBack}
       makeRound={makeRound}
     />

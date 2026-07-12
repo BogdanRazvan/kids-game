@@ -8,7 +8,7 @@ import { draw, SCENE, SceneBg, SceneDefs, VH, VW } from './sceneArt'
 
 // The picture stays whole. Each tray piece is an exact rectangular crop of it;
 // the child searches the picture for where that crop belongs and drops it there.
-const INTRO = 'Completează imaginea'
+const INTRO = 'Găsește locul potrivit al fiecărei imagini'
 const LEVELS = [3, 4, 5] // pieces per level
 const COLS = 3
 const ROWS = 3
@@ -158,7 +158,7 @@ export function Puzzle({ onBack }: GameProps) {
             <span className="prompt-icon" aria-hidden="true">
               🔊
             </span>
-            Completează imaginea
+            Găsește locul potrivit al fiecărei imagini
           </button>
           <div className="diff-progress" aria-label={`${placed.size} din ${pieces.length}`}>
             {pieces.map((_, i) => (
