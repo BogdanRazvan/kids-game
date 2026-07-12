@@ -106,9 +106,14 @@ button:focus-visible {
   line-height: 1;
 }
 .card-title {
-  font-size: clamp(18px, 3.4vw, 26px);
+  font-size: clamp(15px, 2.8vw, 20px);
   font-weight: 700;
   color: var(--c);
+  text-align: center;
+  line-height: 1.15;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  hyphens: none;
 }
 
 /* ---------- TOP BAR ---------- */
@@ -978,6 +983,305 @@ button:focus-visible {
 }
 .mem-q {
   font-size: clamp(40px, 9vw, 64px);
+}
+
+/* ---------- FREE PLAY: COLORING & PAINT ---------- */
+.color-canvas {
+  width: min(88vw, 420px);
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  border-radius: 20px;
+  border: 5px solid #dee2e6;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.08), 0 10px 22px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+}
+.color-canvas svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.paint-canvas {
+  width: min(92vw, 540px);
+  height: min(46vh, 440px);
+  background: #fff;
+  border-radius: 20px;
+  border: 5px solid #dee2e6;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.08), 0 10px 22px rgba(0, 0, 0, 0.14);
+  touch-action: none;
+}
+.paint-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  max-width: min(92vw, 540px);
+}
+.paint-swatch {
+  width: clamp(34px, 9vw, 46px);
+  height: clamp(34px, 9vw, 46px);
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: transform 0.1s;
+}
+.paint-swatch:active {
+  transform: scale(0.9);
+}
+.paint-swatch.sel {
+  border-color: #212529;
+  transform: scale(1.15);
+}
+.tool-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.tool-btn {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #fff;
+  font-size: clamp(15px, 3.4vw, 20px);
+  font-weight: 700;
+  color: var(--ink);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1), 0 6px 14px rgba(0, 0, 0, 0.14);
+}
+.tool-btn:active {
+  transform: translateY(2px);
+}
+.brush-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1), 0 6px 14px rgba(0, 0, 0, 0.14);
+}
+.brush-btn.sel {
+  outline: 3px solid #212529;
+}
+.brush-dot {
+  border-radius: 50%;
+  display: block;
+}
+
+/* ---------- FREE PLAY: BUBBLES ---------- */
+.bubbles-head {
+  display: flex;
+  justify-content: center;
+  padding: 12px 12px 0;
+}
+.bubbles-area {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  touch-action: manipulation;
+}
+.bubble {
+  position: absolute;
+  bottom: -25%;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.95), currentColor 72%);
+  opacity: 0.9;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  animation-name: bubble-rise;
+  animation-duration: var(--dur, 7s);
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes bubble-rise {
+  from {
+    bottom: -25%;
+  }
+  to {
+    bottom: 115%;
+  }
+}
+.bubble.pop {
+  animation: bubble-pop 0.18s ease-out forwards;
+}
+@keyframes bubble-pop {
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* ---------- FREE PLAY: INSTRUMENTS ---------- */
+.inst-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(8px, 2vw, 16px);
+  justify-content: center;
+  max-width: min(94vw, 640px);
+}
+.inst-tab {
+  --c: #7048e8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: clamp(72px, 20vw, 100px);
+  padding: 12px 8px 10px;
+  border-radius: 20px;
+  background: #fff;
+  border: 2.5px solid #edeef2;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.06), 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease, border-color 0.14s ease;
+}
+.inst-tab:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.06), 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.inst-tab.sel {
+  background: var(--c);
+  border-color: var(--c);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--c) 45%, #000 12%),
+    0 12px 22px color-mix(in srgb, var(--c) 45%, transparent);
+}
+.inst-tab-emoji {
+  font-size: clamp(30px, 7.5vw, 44px);
+  line-height: 1;
+  transition: transform 0.14s ease;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.15));
+}
+.inst-tab.sel .inst-tab-emoji {
+  transform: scale(1.16) rotate(-4deg);
+}
+.inst-tab-label {
+  font-size: clamp(12px, 2.8vw, 16px);
+  font-weight: 800;
+  color: var(--c);
+}
+.inst-tab.sel .inst-tab-label {
+  color: #fff;
+}
+
+/* Piano keyboard */
+.piano {
+  display: flex;
+  gap: 4px;
+  width: min(94vw, 600px);
+  height: min(44vh, 380px);
+  padding: 10px;
+}
+.key {
+  flex: 1 1 0;
+  min-width: 0;
+  background: linear-gradient(#ffffff, #f1f3f5);
+  border: 2px solid #ced4da;
+  border-radius: 0 0 12px 12px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.12);
+  transition: transform 0.08s, background 0.08s;
+  cursor: pointer;
+}
+.key.hit {
+  background: linear-gradient(#e7dbff, #d0bfff);
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+}
+.key-label {
+  font-size: clamp(11px, 2.4vw, 16px);
+  font-weight: 700;
+  color: #868e96;
+}
+
+/* Flute: tap the finger-holes along the tube. */
+.flute {
+  width: min(96vw, 560px);
+}
+.flute.small {
+  width: min(72vw, 400px);
+}
+.flute svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 6px 6px rgba(0, 0, 0, 0.18));
+}
+.flute-hole {
+  cursor: pointer;
+}
+.hole-core {
+  fill: #343a40;
+  transition: fill 0.1s;
+}
+.flute-hole.hit .hole-core {
+  fill: var(--c);
+}
+.flute-hole.hit .hole-ring {
+  filter: drop-shadow(0 0 5px var(--c));
+}
+
+/* Drum kit / gong rack: illustrated instruments whose pieces are hit zones. */
+.drumkit {
+  width: min(96vw, 640px);
+}
+.gong {
+  width: min(88vw, 480px);
+}
+.drumkit svg,
+.gong svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.18));
+}
+.drum-part {
+  transition: filter 0.08s;
+}
+.drum-part.hit {
+  filter: brightness(1.28);
+}
+
+/* ---------- FREE PLAY: XYLOPHONE ---------- */
+.xylo {
+  display: flex;
+  gap: clamp(4px, 1.4vw, 10px);
+  align-items: flex-start;
+  justify-content: center;
+  width: min(94vw, 600px);
+  height: min(50vh, 460px);
+  padding: 10px;
+}
+.xylo-bar {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: 12px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.18), 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.08s, filter 0.08s;
+  cursor: pointer;
+}
+.xylo-bar.hit {
+  transform: translateY(5px) scale(0.98);
+  filter: brightness(1.15);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
+}
+.xylo-peg {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  transform: translateX(-50%);
+  width: clamp(8px, 2.4vw, 14px);
+  height: clamp(8px, 2.4vw, 14px);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.xylo-peg.bottom {
+  top: auto;
+  bottom: 8px;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -26,16 +26,21 @@ export function Remember({ onBack }: GameProps) {
   const [watching, setWatching] = useState(true)
   const [reward, setReward] = useState(false)
   const [wrong, setWrong] = useState(false)
+  // The first sequence waits until the narrator finishes the instruction.
+  const [ready, setReady] = useState(false)
   const timers = useRef<number[]>([])
   const done = index >= ROUNDS_PER_GAME
 
   useEffect(() => {
-    speak(INTRO)
+    speak(INTRO, () => setReady(true))
+    // Safety net: start anyway if the audio never signals completion.
+    const t = window.setTimeout(() => setReady(true), 4000)
+    return () => clearTimeout(t)
   }, [])
 
   // Play the sequence, then hand over to the player.
   useEffect(() => {
-    if (done || !watching) return
+    if (done || !watching || !ready) return
     timers.current.forEach(clearTimeout)
     timers.current = []
     let t = 700
@@ -49,7 +54,7 @@ export function Remember({ onBack }: GameProps) {
     })
     timers.current.push(window.setTimeout(() => setWatching(false), t))
     return () => timers.current.forEach(clearTimeout)
-  }, [watching, seq, done])
+  }, [watching, seq, done, ready])
 
   function newRound(l: number) {
     setSeq(makeSeq(LEVELS[l]))

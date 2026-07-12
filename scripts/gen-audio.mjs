@@ -205,6 +205,11 @@ DIGITS.forEach((d) => phrases.add(d)) // spoken as Romanian number names
   'Mai mult',
   'Intrusul',
   'Muzică',
+  // activity titles (spoken when an activity starts)
+  'Colorează',
+  'Pictează',
+  'Sparge bulele',
+  'Instrumente',
 ].forEach((s) => phrases.add(s))
 
 const fileFor = (text) => createHash('sha1').update(text).digest('hex').slice(0, 16) + '.mp3'

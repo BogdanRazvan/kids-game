@@ -33,6 +33,14 @@ const MEDIUM_GAMES: GameCard[] = [
   { id: 'remember', title: 'Ține minte', emoji: '💡', color: '#7048e8' },
 ]
 
+// Open-ended, no-fail free play for the littlest kids.
+const FREE_GAMES: GameCard[] = [
+  { id: 'coloring', title: 'Colorează', emoji: '🖍️', color: '#e8348c' },
+  { id: 'paint', title: 'Pictează', emoji: '🖌️', color: '#1c7ed6' },
+  { id: 'bubbles', title: 'Bule', emoji: '🫧', color: '#22b8cf' },
+  { id: 'instruments', title: 'Instrumente', emoji: '🎵', color: '#f76707' },
+]
+
 type Props = { onPick: (id: GameId) => void }
 
 export function Home({ onPick }: Props) {
@@ -40,23 +48,25 @@ export function Home({ onPick }: Props) {
     <div className="home">
       <header className="home-head">
         <h1>Joacă și Învață</h1>
-        <p>Alege un joc</p>
       </header>
-      <Section games={EASY_GAMES} onPick={onPick} />
-      <Section games={MEDIUM_GAMES} onPick={onPick} />
+      <Section title="Alege un joc" games={[...EASY_GAMES, ...MEDIUM_GAMES]} onPick={onPick} />
+      <Section title="Alege o activitate" games={FREE_GAMES} onPick={onPick} />
     </div>
   )
 }
 
 function Section({
+  title,
   games,
   onPick,
 }: {
+  title?: string
   games: GameCard[]
   onPick: (id: GameId) => void
 }) {
   return (
     <section className="section">
+      {title && <h2 className="section-title">{title}</h2>}
       <div className="grid">
         {games.map((g) => (
           <button

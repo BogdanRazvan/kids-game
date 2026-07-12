@@ -7,7 +7,15 @@
       "Bash(sed -i \"s/const MERGE = 26.*/const MERGE = 62/; s/const MIN_AREA = 22.*/const MIN_AREA = 30/\" detect-diffs.mjs)",
       "Bash(sed -i \"s#{ slug: 'city'.*#\\\\# city excluded \\(separate image, not a pair\\)#\" detect-diffs.mjs)",
       "Bash(node detect-diffs.mjs)",
-      "Bash(ffmpeg -y -loglevel error -i /home/raz/Pictures/kids-art/image2.jpg -vf \"scale=720:900:force_original_aspect_ratio=increase,crop=720:900\" -q:v 3 public/puzzles/city.jpg)"
+      "Bash(ffmpeg -y -loglevel error -i /home/raz/Pictures/kids-art/image2.jpg -vf \"scale=720:900:force_original_aspect_ratio=increase,crop=720:900\" -q:v 3 public/puzzles/city.jpg)",
+      "Bash(awk '/^\\\\.game[ ,{]/{f=1} f{print} /^}/{if\\(f\\){f=0}}' src/styles.css)",
+      "Bash(ffmpeg -y -loglevel error -i /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/color_floare.png -i /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/color_casa.png -i /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/color_peste.png -i /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/color_fluture.png -filter_complex [0][1][2][3]hstack=4 /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/color_all.png)",
+      "Bash(awk '/\\\\.card-title|\\\\.card \\\\{|\\\\.card-emoji|\\\\.card,/{f=1} f{print} /^}/{if\\(f\\){print \"\";f=0}}' src/styles.css)",
+      "Bash(awk '/\\\\.grid \\\\{/{f=1} f{print} /^}/{if\\(f\\){f=0}}' src/styles.css)",
+      "Bash(SP=/tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad node /tmp/bell.mjs)",
+      "Bash(SP=/tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad node /tmp/kit.mjs)",
+      "Bash(SP=/tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad node /tmp/gong.mjs)",
+      "Bash(node scripts/gen-instrument-samples.mjs)"
     ]
   }
 }

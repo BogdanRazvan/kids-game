@@ -25,6 +25,10 @@ import { MissingNumber } from './games/MissingNumber'
 import { ConnectDots } from './games/ConnectDots'
 import { Food } from './games/Food'
 import { Remember } from './games/Remember'
+import { Coloring } from './games/Coloring'
+import { Paint } from './games/Paint'
+import { Bubbles } from './games/Bubbles'
+import { Instruments } from './games/Instruments'
 
 export type GameId =
   | 'colors'
@@ -52,6 +56,10 @@ export type GameId =
   | 'dots'
   | 'food'
   | 'remember'
+  | 'coloring'
+  | 'paint'
+  | 'bubbles'
+  | 'instruments'
 type Screen = 'home' | GameId
 
 export default function App() {
@@ -86,6 +94,10 @@ export default function App() {
       {screen === 'dots' && <ConnectDots onBack={back} />}
       {screen === 'food' && <Food onBack={back} />}
       {screen === 'remember' && <Remember onBack={back} />}
+      {screen === 'coloring' && <Coloring onBack={back} />}
+      {screen === 'paint' && <Paint onBack={back} />}
+      {screen === 'bubbles' && <Bubbles onBack={back} />}
+      {screen === 'instruments' && <Instruments onBack={back} />}
     </div>
   )
 }
