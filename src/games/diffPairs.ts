@@ -24,7 +24,7 @@ export const DIFF_PAIRS: DiffPair[] = [
       { x: 0.758, y: 0.438, r: 0.11 }, // blue bird on the window
       { x: 0.164, y: 0.82, r: 0.2 }, // pink plant (bottom-left)
       { x: 0.404, y: 0.763, r: 0.1 }, // green pillow on the couch
-      { x: 0.123, y: 0.388, r: 0.09 }, // purple plant (middle-left)
+      { x: 0.123, y: 0.46, r: 0.09, ry: 0.18 }, // purple plant + the flower just below (tall)
     ],
   },
   {
@@ -32,7 +32,7 @@ export const DIFF_PAIRS: DiffPair[] = [
     b: '/puzzles/diff/mountains_b.jpg',
     diffs: [
       { x: 0.406, y: 0.248, r: 0.13 }, // flock of birds (top): 5 on the left, 2 on the right
-      { x: 0.76, y: 0.48, r: 0.11 }, // cactus standing over the sun
+      { x: 0.76, y: 0.5, r: 0.11 }, // cactus standing over the sun
     ],
   },
 ]

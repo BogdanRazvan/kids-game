@@ -94,9 +94,10 @@ OVERRIDES['Ce mănâncă?'] = { length: 1.5, synth: 'Ce mănâncă.' }
 // Sizes words — short, so clean ending + a little slower.
 OVERRIDES['cel mare'] = { length: 1.4, synth: 'cel mare.' }
 OVERRIDES['cel mic'] = { length: 1.4, synth: 'cel mic.' }
-// "triunghi" gets mangled ("triundi") as one token; lean on the known word
-// "unghi" (hard g before i) by splitting: "tri-unghi".
+// "triunghi"/"dreptunghi" get mangled ("triundi") as one token; lean on the
+// known word "unghi" (hard g before i) by splitting on it.
 OVERRIDES['triunghi'] = { synth: 'tri-unghi' }
+OVERRIDES['dreptunghi'] = { synth: 'drept-unghi' }
 
 function piperSynth(text, wav, length) {
   execFileSync(PIPER_BIN, ['--model', PIPER_MODEL, '--length_scale', String(length), '--sentence_silence', '0.45', '--output_file', wav], { input: text })

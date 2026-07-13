@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { TopBar } from './TopBar'
 import { DoneScreen } from './DoneScreen'
 import { Reward } from './Reward'
@@ -37,11 +37,26 @@ type Props = {
 export function PickGame({ title, onBack, makeRound, levelOptions, intro }: Props) {
   const [level, setLevel] = useState(0)
   const [index, setIndex] = useState(0)
-  const [round, setRound] = useState<Round>(() => makeRound(levelOptions[0], 0))
+  // Targets already asked this run, so the same one isn't asked twice in a row
+  // of rounds (e.g. "bej, roz, bej"). Resets once every target has been used.
+  const usedAnswers = useRef<Set<string>>(new Set())
+  const [round, setRound] = useState<Round>(() => freshRound(levelOptions[0], 0))
   const [reward, setReward] = useState(false)
   const [wrongKey, setWrongKey] = useState<string | null>(null)
   const options = levelOptions[level]
   const done = index >= ROUNDS_PER_GAME
+
+  // Build a round whose target hasn't been used yet this run (unless the pool is
+  // exhausted, in which case start a fresh cycle).
+  function freshRound(opts: number, lvl: number): Round {
+    let r = makeRound(opts, lvl)
+    for (let i = 0; i < 30 && usedAnswers.current.has(r.answer); i++) {
+      r = makeRound(opts, lvl)
+    }
+    if (usedAnswers.current.has(r.answer)) usedAnswers.current.clear()
+    usedAnswers.current.add(r.answer)
+    return r
+  }
 
   // The full prompt: intro stem + the round's word. Used on entry and whenever
   // the child asks to hear it again. Empty when the game has no speech.
@@ -67,7 +82,7 @@ export function PickGame({ title, onBack, makeRound, levelOptions, intro }: Prop
       setTimeout(() => {
         setReward(false)
         setIndex((i) => i + 1)
-        setRound(makeRound(options, level))
+        setRound(freshRound(options, level))
       }, 1100)
     } else {
       wrongBuzz()
@@ -79,8 +94,9 @@ export function PickGame({ title, onBack, makeRound, levelOptions, intro }: Prop
 
   // Replay the same level.
   function restart() {
+    usedAnswers.current.clear()
     setIndex(0)
-    setRound(makeRound(options, level))
+    setRound(freshRound(options, level))
   }
 
   // Advance to the next (harder) level.
@@ -88,7 +104,7 @@ export function PickGame({ title, onBack, makeRound, levelOptions, intro }: Prop
     const nl = Math.min(level + 1, levelOptions.length - 1)
     setLevel(nl)
     setIndex(0)
-    setRound(makeRound(levelOptions[nl], nl))
+    setRound(freshRound(levelOptions[nl], nl))
   }
 
   return (

@@ -13,8 +13,7 @@ const INTRO = 'Pune fiecare obiect în căsuța potrivită'
 type Item = { id: number; emoji: string; bin: 0 | 1 }
 type Round = { items: Item[]; labels: [string, string] }
 
-function makeRound(n: number): Round {
-  const [a, b] = sample(CATEGORIES, 2)
+function makeRound(n: number, a: string[], b: string[]): Round {
   const half = Math.ceil(n / 2)
   const itemsA = sample(a, half).map((emoji, i) => ({ id: i, emoji, bin: 0 as const }))
   const itemsB = sample(b, n - half).map((emoji, i) => ({ id: half + i, emoji, bin: 1 as const }))
@@ -24,7 +23,8 @@ function makeRound(n: number): Round {
 export function Sorting({ onBack }: GameProps) {
   const [level, setLevel] = useState(0)
   const [index, setIndex] = useState(0)
-  const [round, setRound] = useState<Round>(() => makeRound(LEVELS[0]))
+  const usedPairs = useRef<Set<string>>(new Set())
+  const [round, setRound] = useState<Round>(() => nextRound(LEVELS[0]))
   const [sorted, setSorted] = useState<Set<number>>(new Set())
   const [dragId, setDragId] = useState<number | null>(null)
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 })
@@ -37,8 +37,21 @@ export function Sorting({ onBack }: GameProps) {
     if (!done && index === 0) speak(INTRO)
   }, [round, done])
 
+  // Pick a category pair not used yet this run (resets once pairs run out).
+  function nextRound(n: number): Round {
+    let i = 0, j = 1, key = ''
+    for (let t = 0; t < 25; t++) {
+      ;[i, j] = sample(CATEGORIES.map((_, k) => k), 2)
+      key = i < j ? `${i}-${j}` : `${j}-${i}`
+      if (!usedPairs.current.has(key)) break
+    }
+    if (usedPairs.current.has(key)) usedPairs.current.clear()
+    usedPairs.current.add(key)
+    return makeRound(n, CATEGORIES[i], CATEGORIES[j])
+  }
+
   function newRound(l: number) {
-    setRound(makeRound(LEVELS[l]))
+    setRound(nextRound(LEVELS[l]))
     setSorted(new Set())
     setDragId(null)
   }
@@ -96,6 +109,7 @@ export function Sorting({ onBack }: GameProps) {
   }
 
   function restart() {
+    usedPairs.current.clear()
     setIndex(0)
     newRound(level)
   }

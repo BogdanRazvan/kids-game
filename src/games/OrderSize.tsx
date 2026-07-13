@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { TopBar } from '../components/TopBar'
 import { DoneScreen } from '../components/DoneScreen'
 import { Reward } from '../components/Reward'
@@ -45,7 +45,8 @@ export function OrderSize({ onBack }: GameProps) {
   const [level, setLevel] = useState(0)
   const [index, setIndex] = useState(0)
   const [items, setItems] = useState<Item[]>(() => makeItems(LEVELS[0]))
-  const [theme, setTheme] = useState(() => pick(THEMES))
+  const usedThemes = useRef<Set<string>>(new Set())
+  const [theme, setTheme] = useState(() => nextTheme())
   const [next, setNext] = useState(0) // expected rank
   const [reward, setReward] = useState(false)
   const [wrongRank, setWrongRank] = useState<number | null>(null)
@@ -55,9 +56,18 @@ export function OrderSize({ onBack }: GameProps) {
     if (!done && index === 0) speak(INTRO)
   }, [items, done])
 
+  // A theme not used yet this run (resets once all are used).
+  function nextTheme() {
+    let t = pick(THEMES)
+    for (let i = 0; i < 20 && usedThemes.current.has(t.emoji); i++) t = pick(THEMES)
+    if (usedThemes.current.has(t.emoji)) usedThemes.current.clear()
+    usedThemes.current.add(t.emoji)
+    return t
+  }
+
   function newRound(l: number) {
     setItems(makeItems(LEVELS[l]))
-    setTheme(pick(THEMES))
+    setTheme(nextTheme())
     setNext(0)
   }
 
@@ -84,6 +94,7 @@ export function OrderSize({ onBack }: GameProps) {
   }
 
   function restart() {
+    usedThemes.current.clear()
     setIndex(0)
     newRound(level)
   }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { TopBar } from '../components/TopBar'
 import { DoneScreen } from '../components/DoneScreen'
 import { Reward } from '../components/Reward'
@@ -43,7 +43,8 @@ const SHAPES: Shape[] = [
 export function ConnectDots({ onBack }: GameProps) {
   const [level, setLevel] = useState(0)
   const [index, setIndex] = useState(0)
-  const [shape, setShape] = useState<Shape>(() => pickShape(0))
+  const usedShapes = useRef<Set<string>>(new Set())
+  const [shape, setShape] = useState<Shape>(() => nextShape(0))
   const [next, setNext] = useState(0) // index of the dot to tap next
   const [complete, setComplete] = useState(false)
   const [reward, setReward] = useState(false)
@@ -55,8 +56,17 @@ export function ConnectDots({ onBack }: GameProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // A shape not drawn yet this run (resets once all eligible are used).
+  function nextShape(l: number): Shape {
+    let s = pickShape(l)
+    for (let i = 0; i < 30 && usedShapes.current.has(s.name); i++) s = pickShape(l)
+    if (usedShapes.current.has(s.name)) usedShapes.current.clear()
+    usedShapes.current.add(s.name)
+    return s
+  }
+
   function newRound(l: number) {
-    setShape(pickShape(l))
+    setShape(nextShape(l))
     setNext(0)
     setComplete(false)
   }
@@ -84,6 +94,7 @@ export function ConnectDots({ onBack }: GameProps) {
   }
 
   function restart() {
+    usedShapes.current.clear()
     setIndex(0)
     newRound(level)
   }
