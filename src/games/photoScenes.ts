@@ -8,4 +8,6 @@ export const PHOTOS = [
   '/puzzles/retro.jpg',
   '/puzzles/garden.jpg',
   '/puzzles/city.jpg',
+  '/puzzles/housenight.jpg',
+  '/puzzles/sunburst.jpg',
 ]

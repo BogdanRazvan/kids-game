@@ -11,7 +11,16 @@
     "split-letters": "node --experimental-strip-types scripts/split-letters.mjs letters",
     "split-digits": "node --experimental-strip-types scripts/split-letters.mjs digits",
     "record-letters": "node --experimental-strip-types scripts/record-set.mjs letters",
-    "record-digits": "node --experimental-strip-types scripts/record-set.mjs digits"
+    "record-digits": "node --experimental-strip-types scripts/record-set.mjs digits",
+    "record-shapes": "node --experimental-strip-types scripts/record-set.mjs shapes",
+    "record-colors": "node --experimental-strip-types scripts/record-set.mjs colors",
+    "record-body": "node --experimental-strip-types scripts/record-set.mjs body",
+    "record-emotions": "node --experimental-strip-types scripts/record-set.mjs emotions",
+    "record-weather": "node --experimental-strip-types scripts/record-set.mjs weather",
+    "record-vehicles": "node --experimental-strip-types scripts/record-set.mjs vehicles",
+    "record-jobs": "node --experimental-strip-types scripts/record-set.mjs jobs",
+    "record-opposites": "node --experimental-strip-types scripts/record-set.mjs opposites",
+    "record-food": "node --experimental-strip-types scripts/record-set.mjs food"
   },
   "dependencies": {
     "react": "18.3.1",

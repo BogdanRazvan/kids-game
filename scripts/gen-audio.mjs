@@ -14,7 +14,7 @@ import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { COLORS, SHAPES, LETTERS, DIGITS, BODY_PARTS, EMOTIONS, WEATHER, VEHICLES, JOBS, OPPOSITES } from '../src/data/content.ts'
+import { COLORS, SHAPES, LETTERS, DIGITS, BODY_PARTS, EMOTIONS, WEATHER, VEHICLES, JOBS, OPPOSITES, FOOD_ANIMALS } from '../src/data/content.ts'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(HERE, '..')
@@ -48,8 +48,6 @@ OVERRIDES.roșu = { length: 1.5, synth: 'rrroșu.' }
 SHAPES.forEach((s) => {
   OVERRIDES[s.name] = { length: 1.4, synth: `${s.name}.` }
 })
-// "pătrat": extra r's for a stronger rolled Romanian r.
-OVERRIDES['pătrat'] = { length: 1.4, synth: 'pătrrrat.' }
 // Letters spoken by their common Romanian names (el, ef, em, en, er, es — the
 // everyday forms, not the reformed le/fe/me…). Rendered slower with a clean
 // ending. "ell" is used for L so espeak doesn't say the word "el" as /jel/.
@@ -96,8 +94,12 @@ OVERRIDES['cel mare'] = { length: 1.4, synth: 'cel mare.' }
 OVERRIDES['cel mic'] = { length: 1.4, synth: 'cel mic.' }
 // "triunghi"/"dreptunghi" get mangled ("triundi") as one token; lean on the
 // known word "unghi" (hard g before i) by splitting on it.
+// "triunghi"/"dreptunghi" render more clearly split on the syllable "unghi".
 OVERRIDES['triunghi'] = { synth: 'tri-unghi' }
 OVERRIDES['dreptunghi'] = { synth: 'drept-unghi' }
+// NOTE: cerc, pătrat, semilună are left plain — espeak-ng phonemizes them
+// correctly. Any remaining voice-model quirks are best fixed by dropping a human
+// recording into scripts/assets/shapes/<name>.mp3 (see `npm run record-shapes`).
 
 function piperSynth(text, wav, length) {
   execFileSync(PIPER_BIN, ['--model', PIPER_MODEL, '--length_scale', String(length), '--sentence_silence', '0.45', '--output_file', wav], { input: text })
@@ -148,7 +150,7 @@ SHAPES.forEach((s) => phrases.add(s.name))
 LETTERS.forEach((l) => phrases.add(l)) // spoken as Romanian letter names
 DIGITS.forEach((d) => phrases.add(d)) // spoken as Romanian number names
 // Topic games speak each item's name per round.
-;[BODY_PARTS, EMOTIONS, WEATHER, VEHICLES, JOBS, OPPOSITES].forEach((list) =>
+;[BODY_PARTS, EMOTIONS, WEATHER, VEHICLES, JOBS, OPPOSITES, FOOD_ANIMALS].forEach((list) =>
   list.forEach((it) => phrases.add(it.name))
 )
 // Animals play REAL sound effects (see below), not spoken onomatopoeia.
@@ -179,15 +181,6 @@ DIGITS.forEach((d) => phrases.add(d)) // spoken as Romanian number names
   'Ajută șoricelul să găsească brânza',
   'Unește punctele în ordine',
   'Ce mănâncă?',
-  // animals eating (Food game) — spoken after the prompt
-  'vaca',
-  'iepurele',
-  'maimuța',
-  'șoarecele',
-  'câinele',
-  'pisica',
-  'ursul',
-  'ursulețul koala',
   'Ține minte și repetă',
   'Apasă pe obiecte, în ordine, de la mic la mare',
   'Pune fiecare obiect în căsuța potrivită',
@@ -292,6 +285,27 @@ for (const d of DIGITS) {
   const mp3 = fileFor(d)
   copyFileSync(rec, join(AUDIO_DIR, mp3))
   manifest[d] = mp3
+}
+// Recorded word clips override the synth ones (npm run record-<set>, then
+// re-run gen-audio). One folder per spoken word-set.
+for (const [dir, list] of [
+  ['shapes', SHAPES],
+  ['colors', COLORS],
+  ['body', BODY_PARTS],
+  ['emotions', EMOTIONS],
+  ['weather', WEATHER],
+  ['vehicles', VEHICLES],
+  ['jobs', JOBS],
+  ['opposites', OPPOSITES],
+  ['food', FOOD_ANIMALS],
+]) {
+  for (const { name } of list) {
+    const rec = join(HERE, 'assets', dir, `${name}.mp3`)
+    if (!existsSync(rec)) continue
+    const mp3 = fileFor(name)
+    copyFileSync(rec, join(AUDIO_DIR, mp3))
+    manifest[name] = mp3
+  }
 }
 
 // --- Instrument note clips (FluidR3_GM soundfont; see public/CREDITS.md) ---

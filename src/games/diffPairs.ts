@@ -35,4 +35,13 @@ export const DIFF_PAIRS: DiffPair[] = [
       { x: 0.76, y: 0.5, r: 0.11 }, // cactus standing over the sun
     ],
   },
+  {
+    a: '/puzzles/diff/hedgehogs_a.jpg',
+    b: '/puzzles/diff/hedgehogs_b.jpg',
+    diffs: [
+      { x: 0.16, y: 0.31, r: 0.09 }, // blue flower added (right, in the flower band)
+      { x: 0.375, y: 0.55, r: 0.08 }, // little heart (left only)
+      { x: 0.37, y: 0.79, r: 0.11 }, // blanket: red (left) → yellow (right)
+    ],
+  },
 ]

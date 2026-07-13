@@ -17,9 +17,7 @@ export function Same({ onBack }: GameProps) {
       prompt: 'Găsește obiectul din poză',
       answer: target,
       display: (
-        <span className="emoji shadow-target" style={spin()}>
-          {target}
-        </span>
+        <span className="emoji shadow-target">{target}</span>
       ),
       choices: opts.map((e) => ({
         key: e,

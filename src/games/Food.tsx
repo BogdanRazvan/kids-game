@@ -1,18 +1,8 @@
 import { PickGame, Round } from '../components/PickGame'
+import { FOOD_ANIMALS as FOODS } from '../data/content'
 import { GameProps, pick, sample, shuffle } from '../lib/game'
 
 // Which food does this animal eat?
-const FOODS = [
-  { animal: '🐮', name: 'vaca', food: '🌾' },
-  { animal: '🐰', name: 'iepurele', food: '🥕' },
-  { animal: '🐵', name: 'maimuța', food: '🍌' },
-  { animal: '🐭', name: 'șoarecele', food: '🧀' },
-  { animal: '🐶', name: 'câinele', food: '🦴' },
-  { animal: '🐱', name: 'pisica', food: '🐟' },
-  { animal: '🐻', name: 'ursul', food: '🍯' },
-  { animal: '🐨', name: 'ursulețul koala', food: '🍃' },
-]
-
 export function Food({ onBack }: GameProps) {
   function makeRound(options: number): Round {
     const target = pick(FOODS)

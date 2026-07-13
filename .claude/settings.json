@@ -101,7 +101,24 @@
       "Bash(python3 - __TRACKED_VAR__/mountains_a.jpg /tmp/cactus.png __TRACKED_VAR__/mountains_b.jpg)",
       "Bash(ffmpeg -y -loglevel error -i __TRACKED_VAR__/mountains_a.jpg -i __TRACKED_VAR__/mountains_b.jpg -filter_complex '[0]scale=300:375[a];[1]scale=300:375[b];[a][b]hstack' __TRACKED_VAR__/m_shortcac.png)",
       "Bash(ffmpeg -y -loglevel error -i /home/raz/Pictures/kids-art/image6.jpg -vf scale=720:900:force_original_aspect_ratio=increase,crop=720:900 -q:v 3 /home/raz/workspace/kids-games/public/puzzles/sunburst.jpg)",
-      "Bash(python3 - /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_a.jpg /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_b.jpg /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/hh_chk.png)"
+      "Bash(python3 - /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_a.jpg /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_b.jpg /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/hh_chk.png)",
+      "Bash(python3 - /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_a.jpg /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_b.jpg /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/hh_chk2.png)",
+      "Bash(python3 - /home/raz/workspace/kids-games/public/puzzles/diff/house_a.jpg /home/raz/workspace/kids-games/public/puzzles/diff/house_b.jpg)",
+      "Bash(ffmpeg -y -loglevel error -i /home/raz/Pictures/kids-art/image5.jpg -vf scale=720:900:force_original_aspect_ratio=increase,crop=720:900 -q:v 3 /home/raz/workspace/kids-games/public/puzzles/housenight.jpg)",
+      "Bash(xargs -n1 basename)",
+      "Bash(ffmpeg -y -loglevel error -i /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_a.jpg -vf scale=360:450,drawgrid=w=36:h=45:t=1:color=red@0.7:t=1 /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/hha_g.png)",
+      "Bash(ffmpeg -y -loglevel error -i /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_b.jpg -vf scale=360:450,drawgrid=w=36:h=45:t=1:color=red@0.7:t=1 /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/hhb_g.png)",
+      "Bash(ffmpeg -y -loglevel error -i /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/hha_g.png -i /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/hhb_g.png -filter_complex '[0]pad=370:450:0:0:white[a];[a][1]hstack' /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/hh_grid2.png)",
+      "Bash(python3 - /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_a.jpg /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_b.jpg /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/hh_v3.png)",
+      "Bash(python3 - /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_a.jpg /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_b.jpg /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/hh_v4.png)",
+      "Bash(python3 - /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_a.jpg /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_b.jpg)",
+      "Bash(python3 - /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_a.jpg /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_b.jpg /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/hh_final.png)",
+      "Bash(python3 - /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_a.jpg /home/raz/workspace/kids-games/public/puzzles/diff/hedgehogs_b.jpg /tmp/claude-1000/-home-raz-workspace-kids-games/08c0809c-349f-44bd-919d-694b50e26b6d/scratchpad/hh_blue.png)",
+      "Bash(python3 -c \"import phonemizer; print\\('phonemizer ok'\\)\")",
+      "Bash(python3 -c \"import whisper; print\\('whisper ok'\\)\")",
+      "Bash(chmod +x /home/raz/workspace/kids-games/scripts/.piper/piper-bin/espeak-ng)",
+      "Bash(export LD_LIBRARY_PATH=\"$P\")",
+      "Bash(/home/raz/workspace/kids-games/scripts/.piper/piper-bin/espeak-ng --path=/home/raz/workspace/kids-games/scripts/.piper/piper-bin -v ro -q --ipa cerc)"
     ]
   }
 }

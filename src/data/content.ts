@@ -170,7 +170,7 @@ export type PickItem = { name: string; emoji: string }
 export const BODY_PARTS: PickItem[] = [
   { name: 'nasul', emoji: '👃' },
   { name: 'urechea', emoji: '👂' },
-  { name: 'ochiul', emoji: '👀' },
+  { name: 'ochii', emoji: '👀' },
   { name: 'gura', emoji: '👄' },
   { name: 'mâna', emoji: '✋' },
   { name: 'piciorul', emoji: '🦶' },
@@ -240,4 +240,17 @@ export const OPPOSITES: PickItem[] = [
   { name: 'încet', emoji: '🐢' },
   { name: 'vesel', emoji: '😀' },
   { name: 'trist', emoji: '😢' },
+]
+
+// Hrană game — "Ce mănâncă?" speaks the animal's `name`; the answer is `food`.
+export type FoodItem = { animal: string; name: string; food: string }
+export const FOOD_ANIMALS: FoodItem[] = [
+  { animal: '🐮', name: 'vaca', food: '🌾' },
+  { animal: '🐰', name: 'iepurele', food: '🥕' },
+  { animal: '🐵', name: 'maimuța', food: '🍌' },
+  { animal: '🐭', name: 'șoarecele', food: '🧀' },
+  { animal: '🐶', name: 'câinele', food: '🦴' },
+  { animal: '🐱', name: 'pisica', food: '🐟' },
+  { animal: '🐻', name: 'ursul', food: '🍯' },
+  { animal: '🐨', name: 'ursulețul koala', food: '🍃' },
 ]

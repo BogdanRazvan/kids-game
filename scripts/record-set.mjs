@@ -12,17 +12,45 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createInterface } from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
-import { LETTERS, DIGITS } from '../src/data/content.ts'
+import {
+  LETTERS, DIGITS, SHAPES, COLORS, FOOD_ANIMALS,
+  BODY_PARTS, EMOTIONS, WEATHER, VEHICLES, JOBS, OPPOSITES,
+} from '../src/data/content.ts'
 
-const SETS = { letters: LETTERS, digits: DIGITS }
+const names = (list) => list.map((x) => x.name)
+const SETS = {
+  letters: LETTERS,
+  digits: DIGITS,
+  shapes: names(SHAPES), // cerc, pătrat, triunghi, …
+  colors: names(COLORS), // roșu, albastru, …
+  body: names(BODY_PARTS), // nasul, urechea, ochii, …
+  emotions: names(EMOTIONS),
+  weather: names(WEATHER),
+  vehicles: names(VEHICLES),
+  jobs: names(JOBS),
+  opposites: names(OPPOSITES),
+  food: names(FOOD_ANIMALS), // vaca, câinele, … (Hrană game)
+}
 const setName = process.argv[2]
-const items = SETS[setName]
-if (!items) {
-  console.error('usage: node record-set.mjs <letters|digits> [mic] [seconds]')
+const all = SETS[setName]
+if (!all) {
+  console.error('usage: node record-set.mjs <set> [mic] [seconds] [only=word1,word2]')
+  console.error('  sets:', Object.keys(SETS).join(', '))
   process.exit(1)
 }
-const mic = process.argv[3] || 'default'
-const secs = process.argv[4] || '3'
+// Args after the set name: an `only=` filter (re-record just those words) plus
+// the positional [mic] [seconds].
+const rest = process.argv.slice(3)
+const onlyArg = rest.find((a) => a.startsWith('only='))
+const only = onlyArg ? onlyArg.slice(5).split(',').map((s) => s.trim()).filter(Boolean) : null
+const pos = rest.filter((a) => !a.startsWith('only='))
+const mic = pos[0] || 'default'
+const secs = pos[1] || '3'
+const items = only ? all.filter((i) => only.includes(i)) : all
+if (!items.length) {
+  console.error(`none of [${only}] are in "${setName}" — available:`, all.join(', '))
+  process.exit(1)
+}
 const HERE = dirname(fileURLToPath(import.meta.url))
 const OUT = join(HERE, 'assets', setName)
 mkdirSync(OUT, { recursive: true })
