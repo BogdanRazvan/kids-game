@@ -212,6 +212,12 @@ DIGITS.forEach((d) => phrases.add(d)) // spoken as Romanian number names
   'Pictează',
   'Sparge bulele',
   'Instrumente',
+  'Artificii',
+  'Ștampile',
+  'Baghetă magică',
+  'Grădina',
+  'Acvariu',
+  'Morișcă',
 ].forEach((s) => phrases.add(s))
 
 const fileFor = (text) => createHash('sha1').update(text).digest('hex').slice(0, 16) + '.mp3'

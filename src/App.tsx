@@ -30,6 +30,12 @@ import { Coloring } from './games/Coloring'
 import { Paint } from './games/Paint'
 import { Bubbles } from './games/Bubbles'
 import { Instruments } from './games/Instruments'
+import { Fireworks } from './games/Fireworks'
+import { Stamps } from './games/Stamps'
+import { Sparkle } from './games/Sparkle'
+import { Garden } from './games/Garden'
+import { Aquarium } from './games/Aquarium'
+import { Spinner } from './games/Spinner'
 import { BodyParts, Emotions, Weather, Vehicles, Jobs, Opposites } from './games/PickTopics'
 
 export type GameId =
@@ -62,6 +68,12 @@ export type GameId =
   | 'paint'
   | 'bubbles'
   | 'instruments'
+  | 'fireworks'
+  | 'stamps'
+  | 'sparkle'
+  | 'garden'
+  | 'aquarium'
+  | 'spinner'
   | 'body'
   | 'emotions'
   | 'weather'
@@ -111,6 +123,12 @@ export default function App() {
       {screen === 'paint' && <Paint onBack={back} />}
       {screen === 'bubbles' && <Bubbles onBack={back} />}
       {screen === 'instruments' && <Instruments onBack={back} />}
+      {screen === 'fireworks' && <Fireworks onBack={back} />}
+      {screen === 'stamps' && <Stamps onBack={back} />}
+      {screen === 'sparkle' && <Sparkle onBack={back} />}
+      {screen === 'garden' && <Garden onBack={back} />}
+      {screen === 'aquarium' && <Aquarium onBack={back} />}
+      {screen === 'spinner' && <Spinner onBack={back} />}
       {screen === 'body' && <BodyParts onBack={back} />}
       {screen === 'emotions' && <Emotions onBack={back} />}
       {screen === 'weather' && <Weather onBack={back} />}

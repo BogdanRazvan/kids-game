@@ -1072,6 +1072,14 @@ button:focus-visible {
   border-color: #212529;
   transform: scale(1.15);
 }
+.eraser-swatch {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(18px, 5vw, 24px);
+  line-height: 1;
+}
 .tool-row {
   display: flex;
   flex-wrap: wrap;
@@ -1324,6 +1332,455 @@ button:focus-visible {
 .xylo-peg.bottom {
   top: auto;
   bottom: 8px;
+}
+
+/* ---------- FREE PLAY: FIREWORKS ---------- */
+.fw-area {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  touch-action: manipulation;
+  background: radial-gradient(circle at 50% 120%, #1b2350 0%, #0c1030 60%, #05061a 100%);
+}
+.fw-star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.6);
+  animation: fw-twinkle var(--dur, 2.5s) ease-in-out var(--delay, 0s) infinite;
+  pointer-events: none;
+}
+@keyframes fw-twinkle {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* The speak-again pill, floated over the sky so no light band shows above it. */
+.fw-prompt {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  backdrop-filter: blur(4px);
+}
+/* Bottom tray to choose a firework shape. */
+.fw-picker {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  gap: clamp(6px, 2vw, 12px);
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
+}
+.fw-tab {
+  width: clamp(40px, 11vw, 52px);
+  height: clamp(40px, 11vw, 52px);
+  border-radius: 50%;
+  font-size: clamp(22px, 6vw, 30px);
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.14);
+  transition: transform 0.12s, background 0.12s;
+}
+.fw-tab.sel {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.14);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.5);
+}
+.fw-rocket {
+  position: absolute;
+  width: 6px;
+  height: 15px;
+  margin: -7px 0 0 -3px;
+  border-radius: 3px;
+  background: currentColor;
+  box-shadow: 0 0 10px 2px currentColor;
+  animation: fw-rise 0.47s ease-out forwards;
+}
+@keyframes fw-rise {
+  from {
+    transform: translateY(var(--from, 300px));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.fw-burst {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+/* The bright pop of light at the heart of the burst. */
+.fw-flash {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, currentColor 70%);
+  box-shadow: 0 0 34px 14px currentColor;
+  animation: fw-flash 0.5s ease-out forwards;
+}
+@keyframes fw-flash {
+  0% {
+    transform: scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+.fw-spark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px 2px currentColor;
+  animation: fw-fly var(--dur, 1.6s) ease-out forwards;
+}
+/* Sparks shoot out (reaching full spread by ~45%), then droop under gravity and
+   fade — the arc of a real firework rather than dots snapping outward. */
+@keyframes fw-fly {
+  0% {
+    transform: translate(0, 0) scale(1.3);
+    opacity: 1;
+  }
+  12% {
+    opacity: 1;
+  }
+  45% {
+    transform: translate(calc(var(--dx) * 0.92), calc(var(--dy) * 0.92)) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), calc(var(--dy) + var(--fall, 80px))) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* ---------- FREE PLAY: STAMPS ---------- */
+.stamp-scene {
+  position: relative;
+  width: min(92vw, 540px);
+  height: min(52vh, 460px);
+  border-radius: 20px;
+  border: 5px solid #dee2e6;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.08), 0 10px 22px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+  touch-action: manipulation;
+  background: linear-gradient(#bce4ff 0%, #d9f2ff 55%, #a9e5a0 55%, #7fd07a 100%);
+}
+.stamp-mark {
+  position: absolute;
+  line-height: 1;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+  animation: stamp-pop 0.22s ease-out;
+  pointer-events: none;
+}
+@keyframes stamp-pop {
+  from {
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+}
+.stamp-pick {
+  width: clamp(40px, 10vw, 54px);
+  height: clamp(40px, 10vw, 54px);
+  border-radius: 16px;
+  background: #fff;
+  font-size: clamp(24px, 6vw, 32px);
+  line-height: 1;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18);
+  transition: transform 0.1s;
+}
+.stamp-pick:active {
+  transform: scale(0.9);
+}
+.stamp-pick.sel {
+  outline: 3px solid #212529;
+  transform: scale(1.12);
+}
+
+/* ---------- FREE PLAY: MAGIC WAND ---------- */
+.sparkle-area {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  touch-action: none;
+  background: radial-gradient(circle at 50% 40%, #2a2350 0%, #161036 55%, #0a0722 100%);
+}
+.spark {
+  position: absolute;
+  line-height: 1;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+  animation: spark-fade 0.9s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes spark-fade {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1) rotate(20deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -80%) scale(0.5) rotate(60deg);
+  }
+}
+
+/* ---------- FREE PLAY: GARDEN ---------- */
+.garden-area {
+  position: relative;
+  width: min(92vw, 540px);
+  height: min(52vh, 460px);
+  border-radius: 20px;
+  border: 5px solid #dee2e6;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.08), 0 10px 22px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+  touch-action: manipulation;
+  background: linear-gradient(#bfe8ff 0%, #dff4ff 60%, #cdeec6 100%);
+}
+.garden-ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 22%;
+  background: linear-gradient(#8fd486, #5cb85c);
+  border-top: 3px solid #4aa84a;
+}
+.garden-plant {
+  position: absolute;
+  bottom: 12%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+.garden-stem {
+  width: 5px;
+  flex: 1;
+  border-radius: 3px;
+  background: linear-gradient(#5cb85c, #3f9b3f);
+  transform-origin: bottom;
+  animation: garden-grow 0.5s ease-out;
+}
+.garden-bloom {
+  font-size: clamp(30px, 8vw, 44px);
+  line-height: 1;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+  animation: garden-bloom 0.45s 0.2s backwards ease-out;
+}
+@keyframes garden-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes garden-bloom {
+  from {
+    transform: scale(0);
+  }
+}
+/* Trees & bushes root at the ground and pop up from their base. */
+.garden-tree {
+  position: absolute;
+  bottom: 9%;
+  transform: translateX(-50%);
+  line-height: 1;
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.2));
+  transform-origin: bottom center;
+  animation: garden-pop 0.5s ease-out;
+  pointer-events: none;
+}
+@keyframes garden-pop {
+  from {
+    transform: translateX(-50%) scale(0);
+  }
+}
+
+/* ---------- FREE PLAY: AQUARIUM ---------- */
+.aqua-tank {
+  position: relative;
+  width: min(92vw, 540px);
+  height: min(52vh, 460px);
+  border-radius: 20px;
+  border: 5px solid #dee2e6;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.08), 0 10px 22px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+  touch-action: manipulation;
+  background: linear-gradient(#7ec8f0 0%, #2f8fd0 60%, #1f6fb0 100%);
+}
+.aqua-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14%;
+  background: linear-gradient(#e6c98a, #cda85f);
+  border-top: 3px solid #bd9a52;
+}
+.aqua-fish {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0;
+  line-height: 1;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+  will-change: transform;
+}
+.aqua-fish-inner {
+  display: inline-block;
+  transition: transform 0.12s;
+}
+/* Per-species body motion (how each animal really moves), layered on top of the
+   JS-driven travel + facing. */
+.aqua-body {
+  display: inline-block;
+  will-change: transform;
+}
+.aqua-body.wiggle {
+  animation: aqua-wiggle 0.5s ease-in-out infinite;
+}
+@keyframes aqua-wiggle {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(6deg); }
+}
+.aqua-body.puff {
+  animation: aqua-puff 2s ease-in-out infinite;
+}
+@keyframes aqua-puff {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.09); }
+}
+.aqua-body.squish {
+  animation: aqua-squish 1.4s ease-in-out infinite;
+}
+@keyframes aqua-squish {
+  0%, 100% { transform: scaleY(1) translateY(0); }
+  50% { transform: scaleY(0.82) translateY(3px); }
+}
+.aqua-body.jet {
+  animation: aqua-jet 0.7s ease-in-out infinite;
+}
+@keyframes aqua-jet {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  50% { transform: scaleY(0.8) scaleX(1.06); }
+}
+.aqua-body.paddle {
+  animation: aqua-paddle 2.4s ease-in-out infinite;
+}
+@keyframes aqua-paddle {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+.aqua-body.twitch {
+  animation: aqua-twitch 0.45s steps(2, end) infinite;
+}
+@keyframes aqua-twitch {
+  0% { transform: translateX(0) rotate(-3deg); }
+  50% { transform: translateX(-2px) rotate(3deg); }
+  100% { transform: translateX(0) rotate(-3deg); }
+}
+.aqua-body.scuttle {
+  animation: aqua-scuttle 0.4s ease-in-out infinite;
+}
+@keyframes aqua-scuttle {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-3px) rotate(3deg); }
+}
+.aqua-body.sway {
+  animation: aqua-sway 1.6s ease-in-out infinite;
+}
+@keyframes aqua-sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+/* Ambient bubbles rising from the sand. Outer span is moved by JS (rise +
+   wobble); the dot pops via CSS when it's told to. */
+.aqua-amb {
+  position: absolute;
+  bottom: 8%;
+  will-change: transform;
+  pointer-events: none;
+}
+.aqua-amb-dot {
+  display: block;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.2) 72%);
+}
+.aqua-amb-dot.pop {
+  animation: aqua-amb-pop 0.2s ease-out forwards;
+}
+@keyframes aqua-amb-pop {
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+.aqua-bubble {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.35);
+  animation: aqua-bub 0.9s ease-in forwards;
+  pointer-events: none;
+}
+@keyframes aqua-bub {
+  to {
+    transform: translateY(-60px) scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* ---------- FREE PLAY: PINWHEEL ---------- */
+.spin-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(80vw, 380px);
+  aspect-ratio: 1 / 1;
+  touch-action: manipulation;
+}
+.spin-wheel {
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.2));
+  cursor: pointer;
+}
+.hint {
+  margin: 0;
+  font-size: clamp(15px, 3.4vw, 20px);
+  font-weight: 700;
+  color: var(--ink);
+  opacity: 0.65;
 }
 
 @media (prefers-reduced-motion: reduce) {

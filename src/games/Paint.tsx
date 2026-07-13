@@ -4,19 +4,33 @@ import { GameProps } from '../lib/game'
 import { speak } from '../lib/audio'
 import { COLORS } from '../data/content'
 
-// Free finger-paint canvas: drag to draw, pick a colour and brush size, clear.
+// Free finger-paint canvas: drag to draw, pick a colour and brush size, erase, or
+// clear the whole thing. A few extra bright hues live only here (they're never
+// spoken, so no audio clips needed).
 const BRUSHES = [8, 18, 32]
+const EXTRA = [
+  { name: 'bleu', hex: '#4dabf7' },
+  { name: 'lime', hex: '#82c91e' },
+  { name: 'indigo', hex: '#4263eb' },
+  { name: 'fucsia', hex: '#e64980' },
+  { name: 'corai', hex: '#ff8787' },
+]
+const PALETTE = [...COLORS, ...EXTRA]
+const ERASE = '#ffffff' // the canvas background
 
 export function Paint({ onBack }: GameProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const drawing = useRef(false)
   const last = useRef<{ x: number; y: number } | null>(null)
-  const [color, setColor] = useState(COLORS[0].hex)
+  const [color, setColor] = useState(PALETTE[0].hex)
   const [brush, setBrush] = useState(BRUSHES[1])
+  const [erasing, setErasing] = useState(false)
   const colorRef = useRef(color)
   const brushRef = useRef(brush)
+  const erasingRef = useRef(erasing)
   colorRef.current = color
   brushRef.current = brush
+  erasingRef.current = erasing
 
   // Size the backing store to the element (×dpr) so strokes stay crisp.
   useEffect(() => {
@@ -56,8 +70,9 @@ export function Paint({ onBack }: GameProps) {
   function stroke(a: { x: number; y: number }, b: { x: number; y: number }) {
     const ctx = canvasRef.current!.getContext('2d')!
     const dpr = window.devicePixelRatio || 1
-    ctx.strokeStyle = colorRef.current
-    ctx.lineWidth = brushRef.current * dpr
+    // The eraser is just a fat white brush.
+    ctx.strokeStyle = erasingRef.current ? ERASE : colorRef.current
+    ctx.lineWidth = (erasingRef.current ? brushRef.current * 1.6 : brushRef.current) * dpr
     ctx.lineCap = 'round'
     ctx.lineJoin = 'round'
     ctx.beginPath()
@@ -108,15 +123,25 @@ export function Paint({ onBack }: GameProps) {
           onPointerCancel={up}
         />
         <div className="paint-palette">
-          {COLORS.map((c) => (
+          {PALETTE.map((c) => (
             <button
               key={c.name}
-              className={'paint-swatch' + (c.hex === color ? ' sel' : '')}
+              className={'paint-swatch' + (!erasing && c.hex === color ? ' sel' : '')}
               style={{ background: c.hex }}
-              onClick={() => setColor(c.hex)}
+              onClick={() => {
+                setColor(c.hex)
+                setErasing(false)
+              }}
               aria-label={c.name}
             />
           ))}
+          <button
+            className={'paint-swatch eraser-swatch' + (erasing ? ' sel' : '')}
+            onClick={() => setErasing((e) => !e)}
+            aria-label="radieră"
+          >
+            🧽
+          </button>
         </div>
         <div className="tool-row">
           {BRUSHES.map((b) => (
@@ -126,11 +151,14 @@ export function Paint({ onBack }: GameProps) {
               onClick={() => setBrush(b)}
               aria-label={`pensulă ${b}`}
             >
-              <span className="brush-dot" style={{ width: b, height: b, background: color }} />
+              <span
+                className="brush-dot"
+                style={{ width: b, height: b, background: erasing ? '#ced4da' : color }}
+              />
             </button>
           ))}
           <button className="tool-btn" onClick={clear}>
-            🧽 Șterge
+            🗑️ Golește
           </button>
         </div>
       </div>

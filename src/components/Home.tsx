@@ -45,6 +45,12 @@ const FREE_GAMES: GameCard[] = [
   { id: 'paint', title: 'Pictează', emoji: '🖌️', color: '#1c7ed6' },
   { id: 'bubbles', title: 'Bule', emoji: '🫧', color: '#22b8cf' },
   { id: 'instruments', title: 'Instrumente', emoji: '🎵', color: '#f76707' },
+  { id: 'fireworks', title: 'Artificii', emoji: '🎆', color: '#7048e8' },
+  { id: 'stamps', title: 'Ștampile', emoji: '🌟', color: '#f59f00' },
+  { id: 'sparkle', title: 'Baghetă magică', emoji: '✨', color: '#e64980' },
+  { id: 'garden', title: 'Grădina', emoji: '🌼', color: '#37b24d' },
+  { id: 'aquarium', title: 'Acvariu', emoji: '🐠', color: '#0ca678' },
+  { id: 'spinner', title: 'Morișcă', emoji: '🌀', color: '#1c7ed6' },
 ]
 
 type Props = { onPick: (id: GameId) => void }
