@@ -1,4 +1,8 @@
+import { useState } from 'react'
 import type { GameId } from '../App'
+import { isFree, useUnlocked } from '../lib/entitlement'
+import { PAYWALL_ENABLED, PRICE_LABEL } from '../lib/config'
+import { Paywall } from './Paywall'
 
 type GameCard = { id: GameId; title: string; emoji: string; color: string }
 
@@ -56,13 +60,49 @@ const FREE_GAMES: GameCard[] = [
 type Props = { onPick: (id: GameId) => void }
 
 export function Home({ onPick }: Props) {
+  const unlocked = useUnlocked()
+  const [showPaywall, setShowPaywall] = useState(false)
+  const gated = PAYWALL_ENABLED && !unlocked
+
+  // Locked games open the paywall instead of the game; free games play as usual.
+  const handlePick = (id: GameId) => {
+    if (gated && !isFree(id)) setShowPaywall(true)
+    else onPick(id)
+  }
+
   return (
     <div className="home">
       <header className="home-head">
         <h1>Joacă și Învață</h1>
       </header>
-      <Section title="Alege un joc" games={[...EASY_GAMES, ...MEDIUM_GAMES]} onPick={onPick} />
-      <Section title="Alege o activitate" games={FREE_GAMES} onPick={onPick} />
+      {gated && (
+        <button className="unlock-banner" onClick={() => setShowPaywall(true)}>
+          <span className="ub-emoji">🎁</span>
+          <span className="ub-text">
+            <span className="ub-title">Deblochează tot. </span>
+            <span className="ub-sub">Peste 30 de jocuri, toate temele, fără reclame</span>
+          </span>
+          <span className="ub-price">{PRICE_LABEL}</span>
+        </button>
+      )}
+      <Section
+        title="Alege un joc"
+        games={[...EASY_GAMES, ...MEDIUM_GAMES]}
+        onPick={handlePick}
+        gated={gated}
+      />
+      <Section
+        title="Alege o activitate"
+        games={FREE_GAMES}
+        onPick={handlePick}
+        gated={gated}
+      />
+      {showPaywall && (
+        <Paywall
+          onClose={() => setShowPaywall(false)}
+          onUnlocked={() => setShowPaywall(false)}
+        />
+      )}
     </div>
   )
 }
@@ -71,26 +111,36 @@ function Section({
   title,
   games,
   onPick,
+  gated,
 }: {
   title?: string
   games: GameCard[]
   onPick: (id: GameId) => void
+  gated: boolean
 }) {
   return (
     <section className="section">
       {title && <h2 className="section-title">{title}</h2>}
       <div className="grid">
-        {games.map((g) => (
-          <button
-            key={g.id}
-            className="card"
-            style={{ ['--c' as string]: g.color } as React.CSSProperties}
-            onClick={() => onPick(g.id)}
-          >
-            <span className="card-emoji">{g.emoji}</span>
-            <span className="card-title">{g.title}</span>
-          </button>
-        ))}
+        {games.map((g) => {
+          const locked = gated && !isFree(g.id)
+          return (
+            <button
+              key={g.id}
+              className={locked ? 'card locked' : 'card'}
+              style={{ ['--c' as string]: g.color } as React.CSSProperties}
+              onClick={() => onPick(g.id)}
+            >
+              {locked && (
+                <span className="lock-badge" aria-hidden="true">
+                  🔒
+                </span>
+              )}
+              <span className="card-emoji">{g.emoji}</span>
+              <span className="card-title">{g.title}</span>
+            </button>
+          )
+        })}
       </div>
     </section>
   )

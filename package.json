@@ -20,7 +20,8 @@
     "record-vehicles": "node --experimental-strip-types scripts/record-set.mjs vehicles",
     "record-jobs": "node --experimental-strip-types scripts/record-set.mjs jobs",
     "record-opposites": "node --experimental-strip-types scripts/record-set.mjs opposites",
-    "record-food": "node --experimental-strip-types scripts/record-set.mjs food"
+    "record-food": "node --experimental-strip-types scripts/record-set.mjs food",
+    "deploy": "npm run build && npx firebase deploy --only hosting"
   },
   "dependencies": {
     "react": "18.3.1",
@@ -30,6 +31,7 @@
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "4.3.4",
+    "firebase-tools": "^15.23.0",
     "typescript": "5.6.3",
     "vite": "5.4.11"
   }

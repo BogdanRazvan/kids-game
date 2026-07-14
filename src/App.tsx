@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { stopAllSound } from './lib/audio'
 import { Home } from './components/Home'
+import { Paywall } from './components/Paywall'
+import { canPlay, useUnlocked } from './lib/entitlement'
 import { Colors } from './games/Colors'
 import { Counting } from './games/Counting'
 import { Shapes } from './games/Shapes'
@@ -84,15 +86,27 @@ type Screen = 'home' | GameId
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
-  // Any screen change silences whatever the previous screen was playing.
+  const [paywall, setPaywall] = useState(false)
+  // Re-render if the unlock flips (e.g. key redeemed) so a pending premium
+  // screen can be entered without a manual reload.
+  useUnlocked()
+  // Any screen change silences whatever the previous screen was playing. Premium
+  // screens are gated here as a backstop to the checks on the Home screen.
   const go = (s: Screen) => {
     stopAllSound()
+    if (s !== 'home' && !canPlay(s)) {
+      setPaywall(true)
+      return
+    }
     setScreen(s)
   }
   const back = () => go('home')
 
   return (
     <div className="app">
+      {paywall && (
+        <Paywall onClose={() => setPaywall(false)} onUnlocked={() => setPaywall(false)} />
+      )}
       {screen === 'home' && <Home onPick={go} />}
       {screen === 'colors' && <Colors onBack={back} />}
       {screen === 'counting' && <Counting onBack={back} />}
