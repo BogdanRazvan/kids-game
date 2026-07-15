@@ -47,3 +47,13 @@ npx cap open ios   # sau android
   `src/components/PickGame.tsx` — ca să adaugi un joc nou, dă-i un `makeRound()`.
 - Emoji-urile sunt plaseholdere gratuite; înlocuiește-le cu ilustrații proprii
   când vrei un aspect unic.
+
+## Licență
+
+**Copyright © 2026 Razvan Bogdan. Toate drepturile rezervate.**
+
+Codul este public ca să poată fi citit — nu este open source. Nu ai dreptul
+să-l folosești, copiezi, modifici sau publici. Vezi [LICENSE](LICENSE).
+
+Materialele terțe (sunete, imagini, biblioteci) au licențele lor proprii și nu
+sunt acoperite de LICENSE — vezi [public/CREDITS.md](public/CREDITS.md).

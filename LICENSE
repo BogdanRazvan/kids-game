@@ -1,0 +1,68 @@
+Copyright (c) 2026 Razvan Bogdan. All rights reserved.
+
+"Joacă și Învață" is proprietary software. It is published on GitHub so that
+others may read the source and evaluate the author's work. It is not open
+source, and no license to use it is granted.
+
+
+WHAT YOU MAY DO
+
+  * View and read this source code.
+  * Quote short excerpts for commentary, review, teaching, or discussion,
+    with attribution.
+
+Nothing else is permitted.
+
+
+WHAT YOU MAY NOT DO
+
+Without prior written permission from the copyright holder, you may not:
+
+  * Use this software or its assets, in whole or in part, for any purpose,
+    commercial or non-commercial.
+  * Copy, reproduce, publish, or redistribute it.
+  * Modify it, or create derivative works from it.
+  * Build, host, deploy, or distribute it, or any application derived from it.
+  * Reuse its assets — audio, images, or game content — in any other project.
+  * Remove or alter this notice or the attributions in public/CREDITS.md.
+
+Reading this code does not grant you a license to reimplement it.
+
+
+THIRD-PARTY MATERIAL
+
+This repository contains third-party material that is NOT covered by this
+license and remains under its own terms. See public/CREDITS.md for the full
+list and required attributions. In particular:
+
+  * Several animal sound recordings are licensed CC BY-SA 3.0 / CC BY-SA 4.0.
+    Those files remain under CC BY-SA. This license does not, and cannot,
+    place any additional restriction on them.
+  * Spoken instructions are generated with Piper (MIT) using a CC0-trained
+    voice. Instrument sounds derive from the FluidR3_GM soundfont (MIT).
+  * Bundled libraries (React, Vite, TypeScript, etc.) remain under their own
+    licenses.
+
+Where this license conflicts with the terms of any third-party material, the
+third-party terms govern that material.
+
+
+A NOTE ON FORKING
+
+GitHub's Terms of Service allow any GitHub user to view and fork public
+repositories through GitHub. That permission comes from GitHub, not from this
+license, and it extends no further: a fork grants you no right to use, deploy,
+modify, or redistribute this software outside of GitHub.
+
+
+NO WARRANTY
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+For permission to use this software, contact the copyright holder.
