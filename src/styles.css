@@ -1977,3 +1977,18 @@ button:focus-visible {
   font-size: 12.5px;
   line-height: 1.4;
 }
+/* Dev affordance: only rendered when the app is served locally. Tap to fill the
+   key field with the local unlock code. */
+.pw-localcode {
+  margin: 10px 0 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px dashed #cfc6e4;
+  background: #faf8ff;
+  color: #7a6f96;
+  font-size: 12px;
+}
+.pw-localcode code {
+  font-weight: 700;
+  color: var(--purple);
+}

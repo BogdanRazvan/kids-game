@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { activateLicense } from '../lib/entitlement'
+import { activateLicense, localUnlockHint } from '../lib/entitlement'
 import { CHECKOUT_URL, PRICE_LABEL, ACTIVATION_LIMIT } from '../lib/config'
 
 type Props = { onClose: () => void; onUnlocked: () => void }
@@ -10,6 +10,8 @@ export function Paywall({ onClose, onUnlocked }: Props) {
   const [key, setKey] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // Only set while running locally — never shown on the deployed site.
+  const localCode = localUnlockHint()
 
   async function redeem() {
     setBusy(true)
@@ -81,6 +83,12 @@ export function Paywall({ onClose, onUnlocked }: Props) {
           Cheia îți este trimisă pe e-mail după cumpărare. O poți folosi pe orice
           dispozitiv al tău.
         </p>
+
+        {localCode && (
+          <button className="pw-localcode" onClick={() => setKey(localCode)}>
+            cod local: <code>{localCode}</code>
+          </button>
+        )}
       </div>
     </div>
   )

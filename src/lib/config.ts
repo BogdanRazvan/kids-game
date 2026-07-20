@@ -26,3 +26,15 @@ export const ACTIVATION_LIMIT = 5
 // decide to make the whole web version free after all). When false, everything
 // is unlocked and no purchase UI is shown.
 export const PAYWALL_ENABLED = true
+
+// A code you can type into the unlock screen ("Introdu cheia") to unlock
+// everything WITHOUT buying — no network, no Lemon Squeezy needed.
+//
+// It is ONLY accepted when the app is served locally: the dev server, or your
+// own machine / LAN (so `npm run preview -- --host` on a tablet works too). On
+// the deployed site it is ignored, so shipping it is safe.
+//
+// Change it to whatever you like. Set it to '' to disable the code completely —
+// do that if you ever package the app with Capacitor, since a native build also
+// serves from localhost.
+export const LOCAL_UNLOCK_CODE = 'JOACA-LOCAL'

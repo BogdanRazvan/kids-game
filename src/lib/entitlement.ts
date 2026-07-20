@@ -8,7 +8,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { useSyncExternalStore } from 'react'
 import type { GameId } from '../App'
-import { PAYWALL_ENABLED, ACTIVATION_LIMIT } from './config'
+import { PAYWALL_ENABLED, ACTIVATION_LIMIT, LOCAL_UNLOCK_CODE } from './config'
 
 // The free teaser: core learning basics + a couple of open-ended toys. Everything
 // NOT in this set requires the one-time unlock.
@@ -93,6 +93,45 @@ export function canPlay(id: GameId): boolean {
   return isFree(id) || isUnlocked()
 }
 
+// ── local unlock code ─────────────────────────────────────────────────────────
+// True when the app is being served from this machine or your own network: the
+// Vite dev server, localhost (`npm run preview`), or a private LAN address (so
+// testing on a tablet via `--host` counts). The deployed site is never "local",
+// so LOCAL_UNLOCK_CODE can't be used there even though it ships in the bundle.
+function isLocal(): boolean {
+  try {
+    // A Capacitor/native build also serves from localhost — don't treat that as
+    // local, or a shipped app would happily accept the code.
+    if (typeof window !== 'undefined' && 'Capacitor' in window) return false
+    if (location.protocol === 'capacitor:' || location.protocol === 'file:') return false
+    if (import.meta.env.DEV) return true
+    const h = location.hostname
+    if (h === 'localhost' || h === '127.0.0.1' || h === '::1' || h.endsWith('.local')) return true
+    // Private LAN ranges (RFC 1918).
+    return (
+      /^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(h) ||
+      /^192\.168\.\d{1,3}\.\d{1,3}$/.test(h) ||
+      /^172\.(1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3}$/.test(h)
+    )
+  } catch {
+    return false
+  }
+}
+
+/** The local unlock code, but only while running locally — otherwise null. Used
+ *  to show a hint on the unlock screen so you don't have to remember it. */
+export function localUnlockHint(): string | null {
+  const code = LOCAL_UNLOCK_CODE.trim()
+  return code && isLocal() ? code : null
+}
+
+/** Does this input match the local unlock code (and are we allowed to use it)? */
+function isLocalUnlockCode(key: string): boolean {
+  const code = LOCAL_UNLOCK_CODE.trim()
+  if (!code || !isLocal()) return false
+  return key.trim().toUpperCase() === code.toUpperCase()
+}
+
 // ── Lemon Squeezy license activation ──────────────────────────────────────────
 // These endpoints are designed to be called from a client and do NOT require the
 // store's secret API key, so they work from this fully-static site.
@@ -126,6 +165,13 @@ export type ActivateResult =
 export async function activateLicense(rawKey: string): Promise<ActivateResult> {
   const key = rawKey.trim()
   if (!key) return { ok: false, reason: 'invalid' }
+
+  // The local code unlocks immediately — no network, no Lemon Squeezy. Ignored
+  // unless the app is served locally, so it does nothing on the deployed site.
+  if (isLocalUnlockCode(key)) {
+    setUnlocked(key)
+    return { ok: true }
+  }
 
   let res: Response
   try {
